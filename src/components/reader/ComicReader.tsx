@@ -24,11 +24,12 @@ export function ComicReader({ comic, chapter, pages, prevChapter, nextChapter }:
   const isVertical = comic.reading_direction === 'ttb'
   const totalPages = pages.length
 
-  // Contar vista al cargar el capítulo
+  // Contar vista una sola vez por capítulo
+  const viewedRef = useRef<string | null>(null)
   useEffect(() => {
+    if (viewedRef.current === chapter.id) return
+    viewedRef.current = chapter.id
     fetch(`/api/chapters/${chapter.id}/view`, { method: 'POST' })
-      .then(r => console.log('view status:', r.status))
-      .catch(e => console.error('view error:', e))
   }, [chapter.id])
 
   // Auto-detectar modo según tipo
