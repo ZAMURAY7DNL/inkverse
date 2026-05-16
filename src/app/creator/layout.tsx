@@ -1,26 +1,24 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export default async function CreatorLayout({ children }: { children: React.ReactNode }) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
   if (!user) {
-    redirect('/?auth=required')
+    redirect('/login')
   }
 
   const NAV_ITEMS = [
     { href: '/creator', label: 'Dashboard', icon: '⬡', exact: true },
     { href: '/creator/comics', label: 'Mis Obras', icon: '📚' },
     { href: '/creator/comics/new', label: 'Nueva Obra', icon: '✦' },
-    { href: '/creator/analytics', label: 'Estadísticas', icon: '📊' },
+    { href: '/creator/analytics', label: 'Estadisticas', icon: '📊' },
     { href: '/creator/settings', label: 'Perfil Creador', icon: '⚙' },
   ]
 
   return (
     <div className="flex min-h-screen bg-dark-bg">
-      {/* Sidebar */}
       <aside className="w-56 shrink-0 border-r border-white/5 bg-dark-surface">
         <div className="sticky top-16">
           <div className="p-4 border-b border-white/5">
@@ -40,13 +38,11 @@ export default async function CreatorLayout({ children }: { children: React.Reac
           </nav>
           <div className="p-4 border-t border-white/5">
             <Link href="/" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
-              ← Volver al sitio
+              Volver al sitio
             </Link>
           </div>
         </div>
       </aside>
-
-      {/* Main content */}
       <main className="flex-1 min-w-0 p-6 md:p-8">
         {children}
       </main>
