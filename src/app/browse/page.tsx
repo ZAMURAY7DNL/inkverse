@@ -52,10 +52,13 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
 
   const buildUrl = (params: Record<string, string>) => {
     const current = { ...searchParams }
-    const merged = { ...current, ...params }
-    // Limpiar valores vacíos
-    Object.keys(merged).forEach(k => !merged[k] && delete merged[k])
-    const qs = new URLSearchParams(merged).toString()
+    const merged: Record<string, string | undefined> = { ...current, ...params }
+    // Limpiar valores vacíos y armar query string
+    const qp: Record<string, string> = {}
+    for (const [k, v] of Object.entries(merged)) {
+      if (v) qp[k] = v
+    }
+    const qs = new URLSearchParams(qp).toString()
     return `/browse${qs ? '?' + qs : ''}`
   }
 
@@ -123,7 +126,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
                     className={`genre-badge cursor-pointer transition-opacity hover:opacity-100 ${
                       searchParams.genre === genre.slug ? 'opacity-100 ring-1' : 'opacity-60'
                     }`}
-                    style={{ backgroundColor: `${genre.color}20`, color: genre.color, ringColor: genre.color }}>
+                    style={{ backgroundColor: `${genre.color}20`, color: genre.color, outlineColor: genre.color }}>
                     {genre.name}
                   </a>
                 ))}
