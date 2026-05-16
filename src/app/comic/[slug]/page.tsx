@@ -135,7 +135,7 @@ export default async function ComicPage({ params }: ComicPageProps) {
                 <FollowButton
                   followingId={comic.author_id}
                   initialFollowing={isFollowingAuthor}
-                  initialFollowersCount={comic.author?.followers_count || 0}
+                  
                 />
               )}
             </div>

@@ -6,13 +6,11 @@ import { useRouter } from 'next/navigation'
 interface FollowButtonProps {
   followingId: string
   initialFollowing: boolean
-  initialFollowersCount: number
 }
 
-export function FollowButton({ followingId, initialFollowing, initialFollowersCount }: FollowButtonProps) {
+export function FollowButton({ followingId, initialFollowing }: FollowButtonProps) {
   const router = useRouter()
   const [following, setFollowing] = useState(initialFollowing)
-  const [followersCount, setFollowersCount] = useState(initialFollowersCount)
   const [loading, setLoading] = useState(false)
 
   const handleFollow = async () => {
@@ -27,7 +25,6 @@ export function FollowButton({ followingId, initialFollowing, initialFollowersCo
       if (res.ok) {
         const data = await res.json()
         setFollowing(data.following)
-        setFollowersCount(prev => data.following ? prev + 1 : prev - 1)
       }
     } finally {
       setLoading(false)
@@ -38,14 +35,13 @@ export function FollowButton({ followingId, initialFollowing, initialFollowersCo
     <button
       onClick={handleFollow}
       disabled={loading}
-      className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
+      className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg border text-sm font-medium transition-all ${
         following
           ? 'border-ink-500/40 bg-ink-500/10 text-ink-300 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30'
           : 'border-ink-500 bg-ink-500 text-white hover:bg-ink-400'
       }`}
     >
       {loading ? '...' : following ? 'Siguiendo' : 'Seguir'}
-      <span className="text-xs opacity-70">({followersCount})</span>
     </button>
   )
 }
