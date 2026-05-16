@@ -29,15 +29,17 @@ export async function uploadComicPage(
   pageNumber: number,
   onProgress?: (progress: number) => void
 ): Promise<UploadPageResult> {
-  const supabase = createClient()
   console.log('iniciando uploadComicPage')
-
-  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
-  const { data: { session } } = await supabase.auth.getSession()
+  const supabase = createClient()
+  const sessionPromise = supabase.auth.getSession()
+  const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout getSession')), 5000))
+  const { data: { session } } = await Promise.race([sessionPromise, timeoutPromise]) as any
   console.log('session:', session?.user?.id)
   const userId = session?.user?.id
   if (!userId) throw new Error('No autenticado')
 
+
+  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
   const fileName = `${userId}/${comicId}/${chapterId}/page_${String(pageNumber).padStart(4, '0')}.${ext}`
 
   if (onProgress) onProgress(10)
