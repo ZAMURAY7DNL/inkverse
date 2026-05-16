@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
@@ -10,11 +10,11 @@ export default async function CreatorLayout({ children }: { children: React.Reac
   }
 
   const NAV_ITEMS = [
-    { href: '/creator', label: 'Dashboard', icon: '?', exact: true },
-    { href: '/creator/comics', label: 'Mis Obras', icon: '??' },
-    { href: '/creator/comics/new', label: 'Nueva Obra', icon: '?' },
-    { href: '/creator/analytics', label: 'Estadisticas', icon: '??' },
-    { href: '/creator/settings', label: 'Perfil Creador', icon: '?' },
+    { href: '/creator', label: 'Dashboard', icon: '⬡', exact: true },
+    { href: '/creator/comics', label: 'Mis Obras', icon: '📚' },
+    { href: '/creator/comics/new', label: 'Nueva Obra', icon: '✦' },
+    { href: '/creator/analytics', label: 'Estadisticas', icon: '📊' },
+    { href: '/creator/settings', label: 'Perfil Creador', icon: '⚙' },
   ]
 
   return (
@@ -42,7 +42,7 @@ export default async function CreatorLayout({ children }: { children: React.Reac
             </Link>
             <form action="/api/auth/signout" method="post">
               <button type="submit" className="text-xs text-red-500 hover:text-red-300 transition-colors">
-                Cerrar sesi�n
+                Cerrar sesion
               </button>
             </form>
           </div>
