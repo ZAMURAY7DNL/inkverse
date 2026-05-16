@@ -162,7 +162,7 @@ export default async function ComicPage({ params }: ComicPageProps) {
               )}
               <span className="flex items-center gap-1.5 text-gray-400">
                 <span>📚</span>
-                <span>{comic.chapters_count} capitulos</span>
+                <span>{comic.views_count.toLocaleString()} visualizaciones</span>
               </span>
             </div>
 
