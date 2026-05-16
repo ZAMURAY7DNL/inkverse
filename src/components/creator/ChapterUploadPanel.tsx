@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
 import { uploadMultiplePages, validateImageFile } from '@/lib/storage'
@@ -24,6 +24,57 @@ const ACCEPTED_FORMATS = {
   'image/gif': ['.gif'],
 }
 
+type ThumbSize = 'sm' | 'md' | 'lg'
+
+const THUMB_COLS: Record<ThumbSize, string> = {
+  sm: 'grid-cols-6 sm:grid-cols-8 md:grid-cols-10',
+  md: 'grid-cols-4 sm:grid-cols-5 md:grid-cols-7',
+  lg: 'grid-cols-3 sm:grid-cols-4 md:grid-cols-5',
+}
+
+function PreviewModal({ src, alt, onClose, onPrev, onNext, hasPrev, hasNext }: {
+  src: string, alt: string, onClose: () => void,
+  onPrev: () => void, onNext: () => void,
+  hasPrev: boolean, hasNext: boolean
+}) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') onPrev()
+      if (e.key === 'ArrowRight') onNext()
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose, onPrev, onNext])
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90" onClick={onClose}>
+      <div className="relative max-w-2xl max-h-[90vh] w-full mx-4" onClick={e => e.stopPropagation()}>
+        <div className="relative w-full" style={{ maxHeight: '85vh' }}>
+          <img src={src} alt={alt} className="w-full h-auto max-h-[85vh] object-contain rounded-lg" />
+        </div>
+        <button onClick={onClose}
+          className="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm transition-colors">
+          ✕
+        </button>
+        {hasPrev && (
+          <button onClick={onPrev}
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors">
+            ←
+          </button>
+        )}
+        {hasNext && (
+          <button onClick={onNext}
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors">
+            →
+          </button>
+        )}
+        <p className="text-center text-xs text-gray-400 mt-2">{alt} · Esc para cerrar · ← → para navegar</p>
+      </div>
+    </div>
+  )
+}
+
 export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, onSaved, onChapterUpdated, onChapterDeleted }: ChapterUploadPanelProps) {
   const [pages, setPages] = useState<{ file: File; preview: string; pageNumber: number }[]>([])
   const [progresses, setProgresses] = useState<UploadProgress[]>([])
@@ -34,6 +85,10 @@ export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, on
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [existingPagesList, setExistingPagesList] = useState<ChapterPage[]>(existingPages)
   const [deletingPage, setDeletingPage] = useState<number | null>(null)
+  const [thumbSize, setThumbSize] = useState<ThumbSize>('sm')
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null)
+  const [previewIndex, setPreviewIndex] = useState<number>(0)
+  const [previewList, setPreviewList] = useState<{ src: string; label: string }[]>([])
 
   const [editingTitle, setEditingTitle] = useState(false)
   const [titleValue, setTitleValue] = useState(chapter.title || '')
@@ -41,6 +96,26 @@ export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, on
   const titleInputRef = useRef<HTMLInputElement>(null)
 
   const startPage = existingPagesList.length + 1
+
+  const openPreview = (list: { src: string; label: string }[], index: number) => {
+    setPreviewList(list)
+    setPreviewIndex(index)
+    setPreviewSrc(list[index].src)
+  }
+
+  const closePreview = () => setPreviewSrc(null)
+
+  const prevPreview = () => {
+    const i = Math.max(0, previewIndex - 1)
+    setPreviewIndex(i)
+    setPreviewSrc(previewList[i].src)
+  }
+
+  const nextPreview = () => {
+    const i = Math.min(previewList.length - 1, previewIndex + 1)
+    setPreviewIndex(i)
+    setPreviewSrc(previewList[i].src)
+  }
 
   const handleSaveTitle = async () => {
     if (savingTitle) return
@@ -191,8 +266,33 @@ export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, on
     ? Math.round(progresses.reduce((sum, p) => sum + p.progress, 0) / progresses.length)
     : 0
 
+  const SizeButton = ({ size, label }: { size: ThumbSize; label: string }) => (
+    <button
+      type="button"
+      onClick={() => setThumbSize(size)}
+      className={`px-2 py-1 rounded text-xs transition-colors ${
+        thumbSize === size
+          ? 'bg-ink-500 text-white'
+          : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+      }`}
+    >
+      {label}
+    </button>
+  )
+
   return (
     <div className="space-y-6">
+      {previewSrc && (
+        <PreviewModal
+          src={previewSrc}
+          alt={previewList[previewIndex]?.label || ''}
+          onClose={closePreview}
+          onPrev={prevPreview}
+          onNext={nextPreview}
+          hasPrev={previewIndex > 0}
+          hasNext={previewIndex < previewList.length - 1}
+        />
+      )}
 
       {/* Metadatos */}
       <div className="rounded-xl border border-white/8 bg-dark-card p-4 space-y-3">
@@ -270,14 +370,21 @@ export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, on
         </div>
       </div>
 
-      {/* Paginas existentes con controles */}
+      {/* Paginas existentes */}
       {existingPagesList.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium text-white mb-3">
-            Paginas subidas ({existingPagesList.length})
-            <span className="text-xs text-gray-500 ml-2 font-normal">— puedes reordenar o eliminar</span>
-          </h3>
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-white">
+              Paginas subidas ({existingPagesList.length})
+              <span className="text-xs text-gray-500 ml-2 font-normal">— reordena o elimina</span>
+            </h3>
+            <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
+              <SizeButton size="sm" label="S" />
+              <SizeButton size="md" label="M" />
+              <SizeButton size="lg" label="L" />
+            </div>
+          </div>
+          <div className={`grid ${THUMB_COLS[thumbSize]} gap-2`}>
             {existingPagesList.map((page, index) => (
               <div key={page.id} className="relative group">
                 <div className="relative aspect-[3/4] rounded overflow-hidden bg-dark-card border border-white/10">
@@ -287,7 +394,19 @@ export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, on
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                  {/* Boton previsualizar esquina superior izquierda */}
+                  <button
+                    type="button"
+                    onClick={() => openPreview(
+                      existingPagesList.map(p => ({ src: p.image_url, label: `Pag. ${p.page_number}` })),
+                      index
+                    )}
+                    className="absolute top-1 left-1 bg-black/50 hover:bg-black/80 text-white rounded w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                    title="Ver en grande"
+                  >
+                    ⤢
+                  </button>
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center gap-1 pb-2">
                     <button type="button" onClick={() => moveExistingPage(index, index - 1)} disabled={index === 0}
                       className="text-xs bg-black/50 text-white px-1.5 py-1 rounded disabled:opacity-30">←</button>
                     <button type="button" onClick={() => handleDeleteExistingPage(page.page_number)}
@@ -337,15 +456,34 @@ export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, on
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-medium text-white">{pages.length} pagina{pages.length !== 1 ? 's' : ''} lista{pages.length !== 1 ? 's' : ''} para subir</h3>
-            <button type="button" onClick={() => setPages([])} className="text-xs text-red-400 hover:text-red-300 transition-colors">Eliminar todas</button>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1">
+                <SizeButton size="sm" label="S" />
+                <SizeButton size="md" label="M" />
+                <SizeButton size="lg" label="L" />
+              </div>
+              <button type="button" onClick={() => setPages([])} className="text-xs text-red-400 hover:text-red-300 transition-colors">Eliminar todas</button>
+            </div>
           </div>
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+          <div className={`grid ${THUMB_COLS[thumbSize]} gap-2`}>
             {pages.map((page, index) => {
               const progress = progresses[index]
               return (
                 <div key={page.preview} className="relative group">
                   <div className="relative aspect-[3/4] rounded overflow-hidden bg-dark-card border border-white/5">
                     <Image src={page.preview} alt={`Pagina ${page.pageNumber}`} fill className="object-cover" />
+                    {/* Boton previsualizar esquina superior izquierda */}
+                    <button
+                      type="button"
+                      onClick={() => openPreview(
+                        pages.map(p => ({ src: p.preview, label: `Pag. ${p.pageNumber}` })),
+                        index
+                      )}
+                      className="absolute top-1 left-1 bg-black/50 hover:bg-black/80 text-white rounded w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                      title="Ver en grande"
+                    >
+                      ⤢
+                    </button>
                     {progress && progress.status !== 'pending' && (
                       <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
                         {progress.status === 'done' && <span className="text-green-400 text-xl">✓</span>}
@@ -359,7 +497,7 @@ export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, on
                       </div>
                     )}
                     {!uploading && (
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center gap-1 pb-2">
                         <button type="button" onClick={() => movePage(index, index - 1)} disabled={index === 0}
                           className="text-xs bg-black/50 text-white px-1.5 py-1 rounded disabled:opacity-30">←</button>
                         <button type="button" onClick={() => removePage(index)}
