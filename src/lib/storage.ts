@@ -79,6 +79,7 @@ export async function uploadMultiplePages(
   if (onProgress) onProgress([...progresses])
 
   const results: UploadPageResult[] = []
+  console.log('uploadMultiplePages iniciado', { files: files.length, comicId, chapterId })
 
   for (let i = 0; i < files.length; i += concurrency) {
     const batch = files.slice(i, i + concurrency)
