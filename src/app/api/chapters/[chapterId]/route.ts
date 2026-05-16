@@ -24,7 +24,7 @@ export async function PATCH(
     return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
   }
 
-  const allowed = ['title', 'volume', 'chapter_number']
+  const allowed = ['title', 'volume', 'chapter_number', 'is_published', 'published_at']
   const updates: Record<string, unknown> = {}
   for (const key of allowed) {
     if (key in body) updates[key] = body[key]
