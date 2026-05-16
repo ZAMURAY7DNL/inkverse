@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
@@ -20,16 +20,16 @@ export function ComicReader({ comic, chapter, pages, prevChapter, nextChapter }:
   const containerRef = useRef<HTMLDivElement>(null)
   const hideTimer = useRef<NodeJS.Timeout>()
 
-  // Contar vista al cargar
-  useEffect(() => {
-    fetch(/api/chapters/${chapter.id}/view, { method: 'POST' })
-  }, [chapter.id])
-
   const isRTL = comic.reading_direction === 'rtl'
   const isVertical = comic.reading_direction === 'ttb'
   const totalPages = pages.length
 
-  // Auto-detectar modo segÃºn tipo
+  // Contar vista al cargar el capítulo
+  useEffect(() => {
+    fetch(`/api/chapters/${chapter.id}/view`, { method: 'POST' })
+  }, [chapter.id])
+
+  // Auto-detectar modo según tipo
   useEffect(() => {
     setReaderMode(isVertical ? 'scroll' : 'page')
   }, [isVertical])
@@ -74,7 +74,7 @@ export function ComicReader({ comic, chapter, pages, prevChapter, nextChapter }:
   if (pages.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black text-gray-400">
-        <p>Este capÃ­tulo no tiene pÃ¡ginas aÃºn.</p>
+        <p>Este capítulo no tiene páginas aún.</p>
       </div>
     )
   }
@@ -87,38 +87,36 @@ export function ComicReader({ comic, chapter, pages, prevChapter, nextChapter }:
       onClick={handlePageClick}
       style={{ cursor: readerMode === 'scroll' ? 'auto' : 'pointer' }}
     >
-      {/* â”€â”€ TOP BAR â”€â”€ */}
+      {/* TOP BAR */}
       <div className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${showUI ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'}`}>
         <div className="flex items-center gap-4 bg-gradient-to-b from-black/90 to-transparent px-4 py-3">
           <Link href={`/comic/${comic.slug}`}
             className="text-white/60 hover:text-white transition-colors text-sm">
-            â† {comic.title}
+            ← {comic.title}
           </Link>
           <span className="text-white/30">/</span>
           <span className="text-white text-sm">
             Cap. {chapter.chapter_number}{chapter.title && `: ${chapter.title}`}
           </span>
           <div className="ml-auto flex items-center gap-3">
-            {/* Reading mode toggle */}
             <button
               onClick={(e) => { e.stopPropagation(); setReaderMode(m => m === 'page' ? 'scroll' : 'page') }}
               className="text-xs text-white/50 hover:text-white border border-white/10 rounded px-2 py-1 transition-colors"
             >
-              {readerMode === 'page' ? 'ðŸ“„ PÃ¡g. a PÃ¡g.' : 'ðŸ“œ Scroll'}
+              {readerMode === 'page' ? '📄 Pág. a Pág.' : '📜 Scroll'}
             </button>
           </div>
         </div>
       </div>
 
-      {/* â”€â”€ CONTENT â”€â”€ */}
+      {/* CONTENT */}
       {readerMode === 'scroll' ? (
-        // SCROLL MODE (webtoons, manhwa)
         <div className="flex flex-col items-center pt-12 pb-20">
           {pages.map((page) => (
             <Image
               key={page.id}
               src={page.image_url}
-              alt={`PÃ¡gina ${page.page_number}`}
+              alt={`Página ${page.page_number}`}
               width={page.image_width || 800}
               height={page.image_height || 1200}
               className="reader-page max-w-3xl w-full"
@@ -127,7 +125,6 @@ export function ComicReader({ comic, chapter, pages, prevChapter, nextChapter }:
           ))}
         </div>
       ) : (
-        // PAGE MODE (manga, comics)
         <div
           className={`flex items-center justify-center min-h-screen ${isRTL ? 'reader-container rtl' : ''}`}
           style={{ paddingTop: '56px', paddingBottom: '56px' }}
@@ -135,7 +132,7 @@ export function ComicReader({ comic, chapter, pages, prevChapter, nextChapter }:
           {pages[currentPage] && (
             <Image
               src={pages[currentPage].image_url}
-              alt={`PÃ¡gina ${currentPage + 1}`}
+              alt={`Página ${currentPage + 1}`}
               width={pages[currentPage].image_width || 800}
               height={pages[currentPage].image_height || 1200}
               className="reader-page"
@@ -146,76 +143,64 @@ export function ComicReader({ comic, chapter, pages, prevChapter, nextChapter }:
         </div>
       )}
 
-      {/* â”€â”€ BOTTOM BAR â”€â”€ */}
+      {/* BOTTOM BAR */}
       <div className={`fixed bottom-0 left-0 right-0 z-50 transition-all duration-200 ${showUI ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'}`}>
         <div className="bg-gradient-to-t from-black/90 to-transparent px-4 py-4">
           {readerMode === 'page' && (
             <>
-              {/* Progress bar */}
               <div className="w-full bg-white/10 rounded-full h-1 mb-3">
                 <div
                   className="bg-ink-500 h-1 rounded-full transition-all"
                   style={{ width: totalPages > 0 ? `${((currentPage + 1) / totalPages) * 100}%` : '0%' }}
                 />
               </div>
-
-              {/* Navigation */}
               <div className="flex items-center justify-between">
-                {/* Prev chapter */}
                 <div>
                   {prevChapter ? (
                     <Link href={`/comic/${comic.slug}/chapter/${prevChapter.chapter_number}`}
                       onClick={(e) => e.stopPropagation()}
                       className="text-xs text-white/50 hover:text-white transition-colors">
-                      â† Cap. {prevChapter.chapter_number}
+                      ← Cap. {prevChapter.chapter_number}
                     </Link>
                   ) : <span />}
                 </div>
-
-                {/* Page nav */}
                 <div className="flex items-center gap-4" onClick={e => e.stopPropagation()}>
                   <button onClick={isRTL ? goNext : goPrev} disabled={currentPage === (isRTL ? totalPages - 1 : 0)}
                     className="w-8 h-8 rounded-full border border-white/10 bg-black/50 flex items-center justify-center text-white/60 hover:text-white hover:border-white/30 transition-colors disabled:opacity-20">
-                    â†
+                    ←
                   </button>
-
                   <span className="text-sm text-white/60 min-w-16 text-center">
                     {currentPage + 1} / {totalPages}
                   </span>
-
                   <button onClick={isRTL ? goPrev : goNext} disabled={currentPage === (isRTL ? 0 : totalPages - 1)}
                     className="w-8 h-8 rounded-full border border-white/10 bg-black/50 flex items-center justify-center text-white/60 hover:text-white hover:border-white/30 transition-colors disabled:opacity-20">
-                    â†’
+                    →
                   </button>
                 </div>
-
-                {/* Next chapter */}
                 <div>
                   {nextChapter ? (
                     <Link href={`/comic/${comic.slug}/chapter/${nextChapter.chapter_number}`}
                       onClick={(e) => e.stopPropagation()}
                       className="text-xs text-white/50 hover:text-white transition-colors">
-                      Cap. {nextChapter.chapter_number} â†’
+                      Cap. {nextChapter.chapter_number} →
                     </Link>
                   ) : <span />}
                 </div>
               </div>
             </>
           )}
-
-          {/* Chapter nav (scroll mode) */}
           {readerMode === 'scroll' && (
             <div className="flex justify-between">
               {prevChapter ? (
                 <Link href={`/comic/${comic.slug}/chapter/${prevChapter.chapter_number}`}
                   className="text-sm text-white/50 hover:text-white transition-colors">
-                  â† CapÃ­tulo {prevChapter.chapter_number}
+                  ← Capítulo {prevChapter.chapter_number}
                 </Link>
               ) : <span />}
               {nextChapter ? (
                 <Link href={`/comic/${comic.slug}/chapter/${nextChapter.chapter_number}`}
                   className="text-sm text-white/50 hover:text-white transition-colors">
-                  CapÃ­tulo {nextChapter.chapter_number} â†’
+                  Capítulo {nextChapter.chapter_number} →
                 </Link>
               ) : <span />}
             </div>
@@ -225,4 +210,3 @@ export function ComicReader({ comic, chapter, pages, prevChapter, nextChapter }:
     </div>
   )
 }
-
