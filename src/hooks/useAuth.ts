@@ -1,5 +1,4 @@
-'use client'
-
+﻿'use client'
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
@@ -16,7 +15,6 @@ export function useAuth() {
   const [state, setState] = useState<AuthState>({
     user: null, profile: null, loading: true, isCreator: false
   })
-
   const supabase = createClient()
 
   const fetchProfile = useCallback(async (userId: string) => {
@@ -29,7 +27,6 @@ export function useAuth() {
   }, [supabase])
 
   useEffect(() => {
-    // Obtener sesión inicial
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (user) {
         const profile = await fetchProfile(user.id)
@@ -39,7 +36,6 @@ export function useAuth() {
       }
     })
 
-    // Escuchar cambios de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (session?.user) {
@@ -50,7 +46,6 @@ export function useAuth() {
         }
       }
     )
-
     return () => subscription.unsubscribe()
   }, [fetchProfile, supabase])
 
@@ -58,7 +53,7 @@ export function useAuth() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/api/auth/callback`,
+        redirectTo: `${window.location.origin}/api/auth/callback?next=/creator`,
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
