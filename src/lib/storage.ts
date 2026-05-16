@@ -30,9 +30,11 @@ export async function uploadComicPage(
   onProgress?: (progress: number) => void
 ): Promise<UploadPageResult> {
   const supabase = createClient()
+  console.log('iniciando uploadComicPage')
 
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
   const { data: { session } } = await supabase.auth.getSession()
+  console.log('session:', session?.user?.id)
   const userId = session?.user?.id
   if (!userId) throw new Error('No autenticado')
 
