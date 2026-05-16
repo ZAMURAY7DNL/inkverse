@@ -40,17 +40,28 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
   const prevChapter = (adjacentChapters || []).find(c => c.chapter_number < chapterNum) as Chapter | null
   const nextChapter = (adjacentChapters || []).find(c => c.chapter_number > chapterNum) as Chapter | null
 
+  // Generar hash único por visita usando IP + UA + timestamp parcial
   const headersList = headers()
-  const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown'
-  const ua = headersList.get('user-agent') || 'unknown'
-  const rawHash = `${ip}-${ua}-${chapter.id}`
+  const ip = headersList.get('x-forwarded-for')?.split(',')[0]?.trim()
+    || headersList.get('x-real-ip')
+    || headersList.get('cf-connecting-ip')
+    || ''
+  const ua = headersList.get('user-agent') || ''
 
-  let hash = 0
-  for (let i = 0; i < rawHash.length; i++) {
-    hash = ((hash << 5) - hash) + rawHash.charCodeAt(i)
-    hash |= 0
+  let viewerHash: string
+  if (ip) {
+    // Si tenemos IP, hash estable por 1 hora
+    const raw = `${ip}-${ua}-${chapter.id}`
+    let h = 0
+    for (let i = 0; i < raw.length; i++) {
+      h = ((h << 5) - h) + raw.charCodeAt(i)
+      h |= 0
+    }
+    viewerHash = Math.abs(h).toString(36)
+  } else {
+    // Sin IP: hash aleatorio — cada visita cuenta (sin proteccion)
+    viewerHash = Math.random().toString(36).slice(2) + Date.now().toString(36)
   }
-  const viewerHash = Math.abs(hash).toString(36)
 
   void supabase.rpc('increment_chapter_views', {
     chapter_id: chapter.id,
