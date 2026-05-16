@@ -2,6 +2,28 @@ import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import type { UploadPageResult } from '@/types'
 
+// GET /api/chapters/[chapterId]/pages - Obtener páginas del capítulo
+export async function GET(
+  request: Request,
+  { params }: { params: { chapterId: string } }
+) {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+
+  const { chapterId } = params
+
+  const { data: pages, error } = await supabase
+    .from('chapter_pages')
+    .select('*')
+    .eq('chapter_id', chapterId)
+    .order('page_number', { ascending: true })
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  return NextResponse.json({ pages: pages || [] })
+}
+
 // POST /api/chapters/[chapterId]/pages - Registrar páginas subidas
 export async function POST(
   request: Request,
@@ -26,7 +48,6 @@ export async function POST(
 
   const pages: UploadPageResult[] = await request.json()
 
-  // Insertar páginas en la base de datos
   const { data: inserted, error } = await supabase
     .from('chapter_pages')
     .upsert(
@@ -42,9 +63,7 @@ export async function POST(
     )
     .select()
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
   // Actualizar el contador de páginas del capítulo
   await supabase
