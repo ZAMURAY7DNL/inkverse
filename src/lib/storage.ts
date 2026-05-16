@@ -39,11 +39,22 @@ export async function uploadComicPage(
 
   if (onProgress) onProgress(10)
 
-  const { error } = await supabase.storage
-    .from('comic-pages')
-    .upload(fileName, file, { upsert: true, contentType: file.type })
-    console.log('resultado upload:', { error: error?.message })
-  if (error) throw new Error(error.message)
+  const uploadUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/comic-pages/${fileName}`
+  const uploadRes = await fetch(uploadUrl, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+      'Content-Type': file.type,
+      'x-upsert': 'true',
+    },
+    body: file,
+  })
+
+  console.log('upload status:', uploadRes.status)
+  if (!uploadRes.ok) {
+    const errText = await uploadRes.text()
+    throw new Error(`Upload failed: ${errText}`)
+  }
 
   if (onProgress) onProgress(100)
 
