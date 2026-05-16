@@ -1,7 +1,7 @@
-import { createClient } from '@/lib/supabase/server'
+﻿import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-// PATCH /api/chapters/[chapterId] — actualizar metadatos del capítulo
+// PATCH /api/chapters/[chapterId] â€” actualizar metadatos del capÃ­tulo
 export async function PATCH(
   request: Request,
   { params }: { params: { chapterId: string } }
@@ -46,4 +46,35 @@ export async function PATCH(
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
   return NextResponse.json({ chapter: data })
+}
+
+// DELETE /api/chapters/[chapterId] - Eliminar capitulo
+export async function DELETE(
+  request: Request,
+  { params }: { params: { chapterId: string } }
+) {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+
+  const { chapterId } = params
+
+  const { data: chapter } = await supabase
+    .from('chapters')
+    .select('id, comic:comics(author_id)')
+    .eq('id', chapterId)
+    .single()
+
+  if (!chapter || (chapter.comic as any)?.author_id !== user.id) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+  }
+
+  const { error } = await supabase
+    .from('chapters')
+    .delete()
+    .eq('id', chapterId)
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  return NextResponse.json({ success: true })
 }
