@@ -30,6 +30,7 @@ export async function uploadComicPage(
   pageNumber: number,
   onProgress?: (progress: number) => void
 ): Promise<UploadPageResult> {
+  console.log('uploadComicPage llamado', { userId, comicId, chapterId, pageNumber })
   const supabase = createClient()
 
 
