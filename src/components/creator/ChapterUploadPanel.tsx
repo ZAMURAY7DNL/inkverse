@@ -10,6 +10,7 @@ import type { ChapterPage, Chapter } from '@/types'
 interface ChapterUploadPanelProps {
   chapter: Chapter
   comicId: string
+  userId: string
   existingPages: ChapterPage[]
   onSaved?: () => void
   onChapterUpdated?: (updated: Chapter) => void
@@ -22,7 +23,7 @@ const ACCEPTED_FORMATS = {
   'image/gif': ['.gif'],
 }
 
-export function ChapterUploadPanel({ chapter, comicId, existingPages, onSaved, onChapterUpdated }: ChapterUploadPanelProps) {
+export function ChapterUploadPanel({ chapter, comicId, userId, existingPages, onSaved, onChapterUpdated }: ChapterUploadPanelProps) {
   const [pages, setPages] = useState<{ file: File; preview: string; pageNumber: number }[]>([])
   const [progresses, setProgresses] = useState<UploadProgress[]>([])
   const [uploading, setUploading] = useState(false)
@@ -113,6 +114,7 @@ export function ChapterUploadPanel({ chapter, comicId, existingPages, onSaved, o
     try {
       const results = await uploadMultiplePages(
         pages.map(p => p.file),
+        userId,
         comicId,
         chapter.id,
         startPage,

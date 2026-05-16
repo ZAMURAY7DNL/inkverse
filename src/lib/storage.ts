@@ -24,19 +24,13 @@ export interface UploadProgress {
  */
 export async function uploadComicPage(
   file: File,
+  userId: string,
   comicId: string,
   chapterId: string,
   pageNumber: number,
   onProgress?: (progress: number) => void
 ): Promise<UploadPageResult> {
-  console.log('iniciando uploadComicPage')
   const supabase = createClient()
-  const sessionPromise = supabase.auth.getSession()
-  const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout getSession')), 5000))
-  const { data: { session } } = await Promise.race([sessionPromise, timeoutPromise]) as any
-  console.log('session:', session?.user?.id)
-  const userId = session?.user?.id
-  if (!userId) throw new Error('No autenticado')
 
 
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
@@ -68,6 +62,7 @@ export async function uploadComicPage(
  */
 export async function uploadMultiplePages(
   files: File[],
+  userId: string,
   comicId: string,
   chapterId: string,
   startPageNumber = 1,
@@ -99,7 +94,7 @@ export async function uploadMultiplePages(
 
         try {
           const result = await uploadComicPage(
-            file, comicId, chapterId, pageNumber,
+            file, userId, comicId, chapterId, pageNumber,
             (progress) => {
               progresses[index].progress = progress
               if (onProgress) onProgress([...progresses])

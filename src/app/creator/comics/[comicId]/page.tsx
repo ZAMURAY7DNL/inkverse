@@ -35,6 +35,7 @@ export default async function ComicManagePage({ params, searchParams }: ComicMan
       initialChapters={chapters}
       initialSelectedChapterId={selectedChapterId || null}
       initialPages={pages}
+      userId={user.id}
     />
   )
 }

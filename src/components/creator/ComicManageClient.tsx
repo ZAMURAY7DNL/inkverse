@@ -13,6 +13,7 @@ interface ComicManageClientProps {
   initialChapters: Chapter[]
   initialSelectedChapterId: string | null
   initialPages: ChapterPage[]
+  userId: string
 }
 
 export function ComicManageClient({
@@ -20,6 +21,7 @@ export function ComicManageClient({
   initialChapters,
   initialSelectedChapterId,
   initialPages,
+  userId,
 }: ComicManageClientProps) {
   const router = useRouter()
   const [chapters, setChapters] = useState<Chapter[]>(initialChapters)
@@ -218,6 +220,7 @@ export function ComicManageClient({
                 <ChapterUploadPanel
                   chapter={selectedChapter}
                   comicId={comic.id}
+                  userId={userId}
                   existingPages={pages}
                   onSaved={handlePagesSaved}
                   onChapterUpdated={handleChapterUpdated}
