@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bangers&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   VARIABLES GLOBALES
+   ============================================================ */
+:root {
+  --ink-primary: #7c4dff;
+  --ink-secondary: #6729e8;
+  --manga-accent: #f03e72;
+  --dark-bg: #0d0d14;
+  --dark-surface: #13131f;
+  --dark-card: #1a1a2e;
+  --dark-border: rgba(124, 77, 255, 0.15);
+  --panel-border: 2px solid #000;
+  --panel-shadow: 4px 4px 0px #000;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: #e8e8f0;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--dark-bg); }
+::-webkit-scrollbar-thumb { background: var(--ink-primary); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--manga-accent); }
+
+/* ============================================================
+   COMPONENTES ESPECÍFICOS DE CÓMICS
+   ============================================================ */
+
+/* Estilo panel de cómic */
+.panel-border {
+  border: var(--panel-border);
+  box-shadow: var(--panel-shadow);
+}
+
+/* Efecto halftone de fondo */
+.halftone-bg {
+  background-image: radial-gradient(circle, rgba(124, 77, 255, 0.08) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Texto estilo cómic */
+.comic-title {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* Badge de género */
+.genre-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+/* Portada de cómic con hover */
+.comic-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.comic-card:hover { transform: translateY(-4px); }
+.comic-card:hover .comic-card-overlay { opacity: 1; }
+
+.comic-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13, 13, 20, 0.95) 0%, transparent 60%);
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+/* Reader de páginas */
+.reader-page {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  image-rendering: high-quality;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Zona de drop para uploads */
+.dropzone-active {
+  border-color: var(--ink-primary) !important;
+  background-color: rgba(124, 77, 255, 0.05) !important;
+}
+
+/* ============================================================
+   ANIMACIONES
+   ============================================================ */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #1a1a2e 25%, #232338 50%, #1a1a2e 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-down { animation: slideDown 0.2s ease-out; }
+
+/* ============================================================
+   MODO LECTOR DE MANGA
+   ============================================================ */
+.reader-container {
+  background: #000;
+  min-height: 100vh;
+}
+
+.reader-container.rtl { direction: rtl; }
+.reader-container.ttb { display: flex; flex-direction: column; align-items: center; }
