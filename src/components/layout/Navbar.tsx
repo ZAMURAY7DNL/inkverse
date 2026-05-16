@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth'
 const NAV_LINKS = [
   { label: 'Explorar', href: '/browse' },
   { label: 'Manga', href: '/browse?type=manga' },
-  { label: 'Cómics', href: '/browse?type=comic' },
+  { label: 'CÃ³mics', href: '/browse?type=comic' },
   { label: 'Webtoons', href: '/browse?type=webtoon' },
   { label: 'Manhwa', href: '/browse?type=manhwa' },
 ]
@@ -55,7 +55,7 @@ export function Navbar() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <span>Buscar...</span>
-            <kbd className="ml-auto text-xs opacity-50 font-mono">⌘K</kbd>
+            <kbd className="ml-auto text-xs opacity-50 font-mono">âŒ˜K</kbd>
           </div>
 
           {/* Auth Area */}
@@ -95,7 +95,7 @@ export function Navbar() {
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
                       Mi Perfil
                     </Link>
-                    <Link href="/profile/library" onClick={() => setProfileOpen(false)}
+                    <Link href="/library" onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
                       Biblioteca
                     </Link>
@@ -106,18 +106,18 @@ export function Navbar() {
                     <div className="my-1 border-t border-white/10" />
                     <Link href="/creator" onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm text-ink-300 hover:text-ink-200 hover:bg-ink-500/10 rounded-md transition-colors font-medium">
-                      ✦ Panel Creador
+                      âœ¦ Panel Creador
                     </Link>
                     <div className="my-1 border-t border-white/10" />
                     <Link href="/profile/settings" onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors">
-                      Configuración
+                      ConfiguraciÃ³n
                     </Link>
                     <button
                       onClick={() => { signOut(); setProfileOpen(false) }}
                       className="flex items-center gap-2 w-full px-3 py-2 text-sm text-manga-400 hover:text-manga-300 hover:bg-manga-500/10 rounded-md transition-colors"
                     >
-                      Cerrar Sesión
+                      Cerrar SesiÃ³n
                     </button>
                   </div>
                 </div>
