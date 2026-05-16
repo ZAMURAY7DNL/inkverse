@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       chapter_number,
       title: title?.trim() || null,
       volume: volume || null,
-      is_published: false,
+      is_published: true,
     })
     .select()
     .single()
