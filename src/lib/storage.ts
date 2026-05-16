@@ -42,7 +42,7 @@ export async function uploadComicPage(
   const { error } = await supabase.storage
     .from('comic-pages')
     .upload(fileName, file, { upsert: true, contentType: file.type })
-
+    console.log('resultado upload:', { error: error?.message })
   if (error) throw new Error(error.message)
 
   if (onProgress) onProgress(100)
