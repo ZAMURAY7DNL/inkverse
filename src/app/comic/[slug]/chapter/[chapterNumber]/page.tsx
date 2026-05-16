@@ -1,6 +1,5 @@
 ﻿import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { headers } from 'next/headers'
 import { getComicBySlug, getChapterPages } from '@/lib/comics'
 import { ComicReader } from '@/components/reader/ComicReader'
 import type { Chapter } from '@/types'
@@ -39,34 +38,6 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
 
   const prevChapter = (adjacentChapters || []).find(c => c.chapter_number < chapterNum) as Chapter | null
   const nextChapter = (adjacentChapters || []).find(c => c.chapter_number > chapterNum) as Chapter | null
-
-  // Generar hash único por visita usando IP + UA + timestamp parcial
-  const headersList = headers()
-  const ip = headersList.get('x-forwarded-for')?.split(',')[0]?.trim()
-    || headersList.get('x-real-ip')
-    || headersList.get('cf-connecting-ip')
-    || ''
-  const ua = headersList.get('user-agent') || ''
-
-  let viewerHash: string
-  if (ip) {
-    // Si tenemos IP, hash estable por 1 hora
-    const raw = `${ip}-${ua}-${chapter.id}`
-    let h = 0
-    for (let i = 0; i < raw.length; i++) {
-      h = ((h << 5) - h) + raw.charCodeAt(i)
-      h |= 0
-    }
-    viewerHash = Math.abs(h).toString(36)
-  } else {
-    // Sin IP: hash aleatorio — cada visita cuenta (sin proteccion)
-    viewerHash = Math.random().toString(36).slice(2) + Date.now().toString(36)
-  }
-
-  void supabase.rpc('increment_chapter_views', {
-    chapter_id: chapter.id,
-    viewer_hash: viewerHash
-  })
 
   return (
     <ComicReader
