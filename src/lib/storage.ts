@@ -20,7 +20,7 @@ export interface UploadProgress {
 
 /**
  * Sube una página de cómic al storage.
- * La ruta en el bucket: {userId}/{comicId}/{chapterId}/page_{pageNumber}.{ext}
+ * Ruta en el bucket: {userId}/{comicId}/{chapterId}/page_{pageNumber}.{ext}
  */
 export async function uploadComicPage(
   file: File,
@@ -36,50 +36,21 @@ export async function uploadComicPage(
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
   const fileName = `${user.id}/${comicId}/${chapterId}/page_${String(pageNumber).padStart(4, '0')}.${ext}`
 
-  // Supabase no soporta progress nativo, simulamos con XHR
-  const imageUrl = await new Promise<string>((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    const formData = new FormData()
-    formData.append('', file)
+  if (onProgress) onProgress(10)
 
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable && onProgress) {
-        onProgress(Math.round((e.loaded / e.total) * 100))
-      }
-    }
+  const { error } = await supabase.storage
+    .from('comic-pages')
+    .upload(fileName, file, { upsert: true, contentType: file.type })
 
-    xhr.onload = async () => {
-      if (xhr.status === 200 || xhr.status === 201) {
-        // Upload vía SDK para simplicidad y RLS
-        const { error } = await supabase.storage
-          .from('comic-pages')
-          .upload(fileName, file, { upsert: true, contentType: file.type })
+  if (error) throw error
 
-        if (error) { reject(error); return }
-        resolve(`${STORAGE_URL}/comic-pages/${fileName}`)
-      } else {
-        reject(new Error(`Upload failed: ${xhr.statusText}`))
-      }
-    }
-    xhr.onerror = () => reject(new Error('Network error'))
+  if (onProgress) onProgress(100)
 
-    // Usamos SDK directamente (más simple y respeta RLS)
-    supabase.storage.from('comic-pages')
-      .upload(fileName, file, { upsert: true, contentType: file.type })
-      .then(({ error }) => {
-        if (error) { reject(error); return }
-        if (onProgress) onProgress(100)
-        resolve(`${STORAGE_URL}/comic-pages/${fileName}`)
-      })
-      .catch(reject)
-  })
-
-  // Obtener dimensiones de la imagen
   const dimensions = await getImageDimensions(file)
 
   return {
     page_number: pageNumber,
-    image_url: imageUrl,
+    image_url: `${STORAGE_URL}/comic-pages/${fileName}`,
     image_width: dimensions?.width,
     image_height: dimensions?.height,
     file_size_bytes: file.size,
@@ -108,7 +79,6 @@ export async function uploadMultiplePages(
 
   const results: UploadPageResult[] = []
 
-  // Procesar en lotes de `concurrency`
   for (let i = 0; i < files.length; i += concurrency) {
     const batch = files.slice(i, i + concurrency)
     const batchResults = await Promise.all(
