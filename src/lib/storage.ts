@@ -85,6 +85,7 @@ export async function uploadMultiplePages(
     const batch = files.slice(i, i + concurrency)
     const batchResults = await Promise.all(
       batch.map(async (file, batchIndex) => {
+        console.log('procesando archivo', { file: file.name, batchIndex })
         const index = i + batchIndex
         const pageNumber = startPageNumber + index
 
