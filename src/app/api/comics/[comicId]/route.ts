@@ -12,7 +12,7 @@ export async function PATCH(
   const { comicId } = params
   const body = await request.json()
 
-  const allowed = ['cover_url', 'banner_url', 'title', 'description', 'status', 'is_mature', 'reading_direction']
+  const allowed = ['cover_url', 'banner_url', 'title', 'description', 'status', 'is_mature', 'reading_direction', 'is_published']
   const updates: Record<string, unknown> = {}
   for (const key of allowed) {
     if (key in body) updates[key] = body[key]
