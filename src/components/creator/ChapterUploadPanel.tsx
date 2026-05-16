@@ -108,6 +108,7 @@ export function ChapterUploadPanel({ chapter, comicId, existingPages, onSaved, o
     if (pages.length === 0) return
     setUploading(true)
     setErrors([])
+    console.log('handleUpload llamado', { pages: pages.length, comicId, chapterId: chapter.id })
 
     try {
       const results = await uploadMultiplePages(
