@@ -30,14 +30,13 @@ export async function uploadComicPage(
   onProgress?: (progress: number) => void
 ): Promise<UploadPageResult> {
   const supabase = createClient()
-console.log('antes de getUser')
-const { data: { session } } = await supabase.auth.getSession()
-const user = session?.user
-console.log('despues de getUser', user?.id)
-  if (!user) throw new Error('No autenticado')
 
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
-  const fileName = `${user.id}/${comicId}/${chapterId}/page_${String(pageNumber).padStart(4, '0')}.${ext}`
+  const { data: { session } } = await supabase.auth.getSession()
+  const userId = session?.user?.id
+  if (!userId) throw new Error('No autenticado')
+
+  const fileName = `${userId}/${comicId}/${chapterId}/page_${String(pageNumber).padStart(4, '0')}.${ext}`
 
   if (onProgress) onProgress(10)
 
@@ -45,7 +44,7 @@ console.log('despues de getUser', user?.id)
     .from('comic-pages')
     .upload(fileName, file, { upsert: true, contentType: file.type })
 
-  if (error) throw error
+  if (error) throw new Error(error.message)
 
   if (onProgress) onProgress(100)
 
