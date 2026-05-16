@@ -31,7 +31,8 @@ export async function uploadComicPage(
 ): Promise<UploadPageResult> {
   const supabase = createClient()
 console.log('antes de getUser')
-const { data: { user } } = await supabase.auth.getUser()
+const { data: { session } } = await supabase.auth.getSession()
+const user = session?.user
 console.log('despues de getUser', user?.id)
   if (!user) throw new Error('No autenticado')
 
@@ -129,7 +130,8 @@ export async function uploadComicCover(
   type: 'cover' | 'banner' = 'cover'
 ): Promise<string> {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) throw new Error('No autenticado')
 
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
@@ -149,7 +151,8 @@ export async function uploadComicCover(
  */
 export async function uploadAvatar(file: File): Promise<string> {
   const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
+  const user = session?.user
   if (!user) throw new Error('No autenticado')
 
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
