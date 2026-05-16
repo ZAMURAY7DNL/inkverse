@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+﻿import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getComicBySlug, getChapterPages } from '@/lib/comics'
 import { ComicReader } from '@/components/reader/ComicReader'
@@ -15,7 +15,7 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
   const comic = await getComicBySlug(params.slug)
   if (!comic) notFound()
 
-  // Obtener el capítulo actual
+  // Obtener el capÃ­tulo actual
   const { data: chapter } = await supabase
     .from('chapters')
     .select('*')
@@ -26,7 +26,7 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
 
   if (!chapter) notFound()
 
-  // Obtener capítulos adyacentes y páginas en paralelo
+  // Obtener capÃ­tulos adyacentes y pÃ¡ginas en paralelo
   const [pages, { data: adjacentChapters }] = await Promise.all([
     getChapterPages(chapter.id),
     supabase
@@ -42,7 +42,7 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
   const nextChapter = (adjacentChapters || []).find(c => c.chapter_number > chapterNum) as Chapter | null
 
   // Incrementar vistas (fire & forget)
-  supabase.from('chapters').update({ views_count: chapter.views_count + 1 }).eq('id', chapter.id)
+  await supabase.rpc('increment_chapter_views', { chapter_id: chapter.id })
 
   return (
     // Sin Navbar ni Footer en el reader
