@@ -40,13 +40,11 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
   const prevChapter = (adjacentChapters || []).find(c => c.chapter_number < chapterNum) as Chapter | null
   const nextChapter = (adjacentChapters || []).find(c => c.chapter_number > chapterNum) as Chapter | null
 
-  // Generar hash del viewer para evitar doble conteo
   const headersList = headers()
   const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown'
   const ua = headersList.get('user-agent') || 'unknown'
   const rawHash = `${ip}-${ua}-${chapter.id}`
-  
-  // Hash simple sin crypto
+
   let hash = 0
   for (let i = 0; i < rawHash.length; i++) {
     hash = ((hash << 5) - hash) + rawHash.charCodeAt(i)
@@ -54,11 +52,10 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
   }
   const viewerHash = Math.abs(hash).toString(36)
 
-  // Incrementar vistas con proteccion anti-doble conteo (fire & forget)
-  supabase.rpc('increment_chapter_views', { 
+  void supabase.rpc('increment_chapter_views', {
     chapter_id: chapter.id,
     viewer_hash: viewerHash
-  }).then(() => {}).catch(() => {})
+  })
 
   return (
     <ComicReader
