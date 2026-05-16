@@ -1,5 +1,6 @@
 ﻿import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { headers } from 'next/headers'
 import { getComicBySlug, getChapterPages } from '@/lib/comics'
 import { ComicReader } from '@/components/reader/ComicReader'
 import type { Chapter } from '@/types'
@@ -15,7 +16,6 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
   const comic = await getComicBySlug(params.slug)
   if (!comic) notFound()
 
-  // Obtener el capÃ­tulo actual
   const { data: chapter } = await supabase
     .from('chapters')
     .select('*')
@@ -26,7 +26,6 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
 
   if (!chapter) notFound()
 
-  // Obtener capÃ­tulos adyacentes y pÃ¡ginas en paralelo
   const [pages, { data: adjacentChapters }] = await Promise.all([
     getChapterPages(chapter.id),
     supabase
@@ -41,11 +40,27 @@ export default async function ReaderPage({ params }: ReaderPageProps) {
   const prevChapter = (adjacentChapters || []).find(c => c.chapter_number < chapterNum) as Chapter | null
   const nextChapter = (adjacentChapters || []).find(c => c.chapter_number > chapterNum) as Chapter | null
 
-  // Incrementar vistas (fire & forget)
-  await supabase.rpc('increment_chapter_views', { chapter_id: chapter.id })
+  // Generar hash del viewer para evitar doble conteo
+  const headersList = headers()
+  const ip = headersList.get('x-forwarded-for') || headersList.get('x-real-ip') || 'unknown'
+  const ua = headersList.get('user-agent') || 'unknown'
+  const rawHash = `${ip}-${ua}-${chapter.id}`
+  
+  // Hash simple sin crypto
+  let hash = 0
+  for (let i = 0; i < rawHash.length; i++) {
+    hash = ((hash << 5) - hash) + rawHash.charCodeAt(i)
+    hash |= 0
+  }
+  const viewerHash = Math.abs(hash).toString(36)
+
+  // Incrementar vistas con proteccion anti-doble conteo (fire & forget)
+  supabase.rpc('increment_chapter_views', { 
+    chapter_id: chapter.id,
+    viewer_hash: viewerHash
+  }).then(() => {}).catch(() => {})
 
   return (
-    // Sin Navbar ni Footer en el reader
     <ComicReader
       comic={comic}
       chapter={chapter as Chapter}
