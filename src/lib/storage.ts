@@ -142,6 +142,7 @@ export async function uploadComicCover(
   const supabase = createClient()
   const { data: { session } } = await supabase.auth.getSession()
   const user = session?.user
+  console.log('uploadComicCover session:', !!session, 'user:', !!user)
   if (!user) throw new Error('No autenticado')
 
   const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
