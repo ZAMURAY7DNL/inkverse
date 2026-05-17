@@ -16,7 +16,7 @@ export default async function MyComicsPage() {
           <p className="text-gray-400 text-sm">{comics.length} obra{comics.length !== 1 ? 's' : ''} creada{comics.length !== 1 ? 's' : ''}</p>
         </div>
         <Link href="/creator/comics/new"
-          className="rounded-lg bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 transition-colors">
+          className="rounded-lg bg-ink-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink-400 transition-colors">
           + Nueva Obra
         </Link>
       </div>
@@ -27,7 +27,7 @@ export default async function MyComicsPage() {
           <p className="text-white font-semibold mb-2">Aun no tienes obras</p>
           <p className="text-gray-500 text-sm mb-6">Crea tu primera obra y empieza a publicar capitulos</p>
           <Link href="/creator/comics/new"
-            className="inline-flex rounded-lg bg-violet-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-violet-500 transition-colors">
+            className="inline-flex rounded-lg bg-ink-500 px-6 py-2.5 text-sm font-semibold text-white hover:bg-ink-400 transition-colors">
             Crear Primera Obra
           </Link>
         </div>

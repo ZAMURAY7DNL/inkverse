@@ -4,112 +4,95 @@ import { ComicCard } from '@/components/comic/ComicCard'
 import type { Comic } from '@/types'
 
 const COMIC_TYPES = [
-  { type: 'manga', label: 'Manga', emoji: '🇯🇵', desc: 'Estilo japonés' },
-  { type: 'manhwa', label: 'Manhwa', emoji: '🇰🇷', desc: 'Estilo coreano' },
-  { type: 'comic', label: 'Cómic', emoji: '💥', desc: 'Estilo occidental' },
-  { type: 'webtoon', label: 'Webtoon', emoji: '📱', desc: 'Vertical scroll' },
-  { type: 'manhua', label: 'Manhua', emoji: '🇨🇳', desc: 'Estilo chino' },
-  { type: 'webcomic', label: 'Webcomic', emoji: '🌐', desc: 'Web original' },
+  { type: 'manga', label: 'Manga', desc: 'Historias japonesas' },
+  { type: 'manhwa', label: 'Manhwa', desc: 'Series coreanas' },
+  { type: 'comic', label: 'Comics', desc: 'Estilo occidental' },
+  { type: 'webtoon', label: 'Webtoon', desc: 'Lectura vertical' },
+  { type: 'manhua', label: 'Manhua', desc: 'Series chinas' },
+  { type: 'webcomic', label: 'Webcomic', desc: 'Publicacion digital' },
 ]
 
 export default async function HomePage() {
-  // Fetch en paralelo
-  const [trending, newest] = await Promise.all([
-    getTrendingComics(12),
-    getNewComics(12),
-  ])
+  const [trending, newest] = await Promise.all([getTrendingComics(12), getNewComics(12)])
 
   return (
-    <div className="min-h-screen">
-
-      {/* ── HERO ── */}
-      <section className="relative overflow-hidden bg-dark-surface border-b border-white/5">
-        <div className="absolute inset-0 halftone-bg opacity-40" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-ink-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-manga-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
+    <div className="min-h-screen bg-dark-bg">
+      <section className="relative overflow-hidden border-b border-white/10 bg-black">
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/20" />
+        <div className="absolute -right-20 top-[-120px] h-[420px] w-[420px] rounded-full bg-ink-500/20 blur-3xl" />
+        <div className="relative mx-auto max-w-7xl px-4 py-20 md:py-28">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-ink-500/30 bg-ink-500/10 px-3 py-1 text-xs text-ink-300 mb-6">
-              ✦ La plataforma de cómics en español
-            </div>
-            <h1 className="comic-title text-5xl md:text-7xl text-white leading-none mb-4">
-              LEE Y PUBLICA <br />
-              <span className="text-ink-400">TU HISTORIA</span>
+            <span className="inline-flex rounded bg-ink-500 px-2.5 py-1 text-xs font-semibold text-white">ESTRENO</span>
+            <h1 className="mt-4 text-5xl font-extrabold leading-tight text-white md:text-7xl">
+              ClickcaComics
             </h1>
-            <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-              Miles de cómics, manga, manhwa y webcomics. Gratis, en español,
-              creados por la comunidad.
+            <p className="mt-4 max-w-xl text-base text-gray-300 md:text-lg">
+              Lee y publica manga, comics y webtoons en una plataforma con estilo cinematografico y herramientas para creadores.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/browse" className="rounded bg-ink-500 px-6 py-3 text-sm font-semibold text-white hover:bg-ink-400 transition-colors panel-border">
-                Explorar Cómics
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/browse" className="rounded bg-ink-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink-400">
+                Explorar
               </Link>
-              <Link href="/creator" className="rounded border border-ink-500/40 bg-ink-500/10 px-6 py-3 text-sm font-semibold text-ink-300 hover:bg-ink-500/20 transition-colors">
-                Publicar mi Obra →
+              <Link href="/creator" className="rounded border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/20">
+                Ir al Portal Creador
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── TIPOS ── */}
       <section className="mx-auto max-w-7xl px-4 py-10">
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-          {COMIC_TYPES.map(({ type, label, emoji, desc }) => (
-            <Link key={type} href={`/browse?type=${type}`}
-              className="flex flex-col items-center gap-1.5 rounded-lg border border-white/5 bg-dark-card p-3 text-center hover:border-ink-500/30 hover:bg-ink-500/5 transition-all group">
-              <span className="text-2xl">{emoji}</span>
-              <span className="text-sm font-medium text-white group-hover:text-ink-300 transition-colors">{label}</span>
-              <span className="text-xs text-gray-500">{desc}</span>
+        <div className="mb-5 rounded-xl border border-white/10 bg-dark-card p-4">
+          <form action="/browse" className="flex flex-col gap-3 sm:flex-row">
+            <input
+              name="search"
+              type="text"
+              placeholder="Busca titulos, autores o generos"
+              className="w-full rounded-lg border border-white/15 bg-dark-surface px-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none transition-colors focus:border-ink-500"
+            />
+            <button className="rounded-lg bg-ink-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-ink-400">
+              Buscar obras
+            </button>
+          </form>
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
+          {COMIC_TYPES.map(({ type, label, desc }) => (
+            <Link
+              key={type}
+              href={`/browse?type=${type}`}
+              className="rounded-lg border border-white/10 bg-dark-card p-3 transition-colors hover:border-ink-500/40 hover:bg-dark-surface"
+            >
+              <p className="text-sm font-semibold text-white">{label}</p>
+              <p className="mt-1 text-xs text-gray-400">{desc}</p>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* ── TRENDING ── */}
       <section className="mx-auto max-w-7xl px-4 pb-12">
-        <div className="flex items-center justify-between mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="comic-title text-3xl text-white">🔥 TRENDING</h2>
-            <p className="text-sm text-gray-500">Los más leídos esta semana</p>
+            <h2 className="text-3xl font-bold text-white">Tendencias</h2>
+            <p className="text-sm text-gray-500">Lo mas visto esta semana</p>
           </div>
-          <Link href="/browse?sort=views" className="text-sm text-ink-400 hover:text-ink-300 transition-colors">
-            Ver todos →
+          <Link href="/browse?sort=views" className="text-sm text-ink-300 transition-colors hover:text-ink-200">
+            Ver todo
           </Link>
         </div>
         <ComicGrid comics={trending} />
       </section>
 
-      {/* ── NUEVOS ── */}
       <section className="mx-auto max-w-7xl px-4 pb-16">
-        <div className="flex items-center justify-between mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="comic-title text-3xl text-white">✨ NUEVAS PUBLICACIONES</h2>
-            <p className="text-sm text-gray-500">Recién llegados a la plataforma</p>
+            <h2 className="text-3xl font-bold text-white">Nuevas Publicaciones</h2>
+            <p className="text-sm text-gray-500">Recien agregados al catalogo</p>
           </div>
-          <Link href="/browse?sort=newest" className="text-sm text-ink-400 hover:text-ink-300 transition-colors">
-            Ver todos →
+          <Link href="/browse?sort=newest" className="text-sm text-ink-300 transition-colors hover:text-ink-200">
+            Ver todo
           </Link>
         </div>
         <ComicGrid comics={newest} />
-      </section>
-
-      {/* ── CTA CREADOR ── */}
-      <section className="border-t border-white/5 bg-dark-surface">
-        <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-          <div className="max-w-xl mx-auto">
-            <div className="text-4xl mb-4">✦</div>
-            <h2 className="comic-title text-4xl text-white mb-3">¿TIENES UNA HISTORIA?</h2>
-            <p className="text-gray-400 mb-8">
-              Publica tu cómic, manga o webcomic gratis. Panel creador con subida de imágenes,
-              gestión de capítulos y estadísticas.
-            </p>
-            <Link href="/creator" className="inline-flex items-center gap-2 rounded bg-manga-500 px-8 py-3 text-sm font-semibold text-white hover:bg-manga-400 transition-colors panel-border">
-              Crear mi Obra
-            </Link>
-          </div>
-        </div>
       </section>
     </div>
   )
@@ -118,15 +101,15 @@ export default async function HomePage() {
 function ComicGrid({ comics }: { comics: Comic[] }) {
   if (comics.length === 0) {
     return (
-      <div className="rounded-lg border border-white/5 bg-dark-card py-12 text-center text-gray-500">
-        No hay cómics disponibles aún. ¡Sé el primero en publicar!
+      <div className="rounded-lg border border-white/10 bg-dark-card py-12 text-center text-gray-500">
+        No hay obras disponibles aun.
       </div>
     )
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-      {comics.map(comic => (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+      {comics.map((comic) => (
         <ComicCard key={comic.id} comic={comic} />
       ))}
     </div>

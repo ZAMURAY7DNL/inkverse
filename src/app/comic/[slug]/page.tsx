@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: ComicPageProps): Promise<Meta
   const comic = await getComicBySlug(params.slug)
   if (!comic) return { title: 'No encontrado' }
   return {
-    title: `${comic.title} - InkVerse`,
-    description: comic.description || `Lee ${comic.title} en InkVerse`,
+    title: `${comic.title} - ClickcaComics`,
+    description: comic.description || `Lee ${comic.title} en ClickcaComics`,
     openGraph: { images: comic.cover_url ? [comic.cover_url] : [] },
   }
 }

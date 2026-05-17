@@ -27,8 +27,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-dark-bg px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="comic-title text-4xl text-white mb-2">INKVERSE</h1>
-          <p className="text-gray-400 text-sm">Lee y publica comics, manga y webcomics</p>
+          <h1 className="text-4xl font-extrabold text-ink-400 mb-2">CLICKCACOMICS</h1>
+          <p className="text-gray-400 text-sm">Lee y publica comics, manga y webtoons</p>
         </div>
 
         <div className="rounded-xl border border-white/10 bg-dark-card p-6 space-y-4">
@@ -43,7 +43,7 @@ export default function LoginPage() {
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-3 rounded-lg bg-ink-500 px-4 py-3 text-sm font-semibold text-white hover:bg-ink-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

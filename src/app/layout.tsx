@@ -5,15 +5,15 @@ import '@/styles/globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'InkVerse — Lee y Publica Cómics, Manga y Webcomics',
-    template: '%s | InkVerse',
+    default: 'ClickcaComics - Lee y publica comics, manga y webtoons',
+    template: '%s | ClickcaComics',
   },
-  description: 'La plataforma de cómics, manga, manhwa, manhua y webcomics en español. Lee gratis y publica tu obra.',
+  description: 'Plataforma para leer y publicar comics, manga, manhwa, manhua y webtoons en espanol.',
   keywords: ['comics', 'manga', 'webcomics', 'manhwa', 'manhua', 'leer manga', 'publicar comics'],
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    siteName: 'InkVerse',
+    siteName: 'ClickcaComics',
   },
 }
 
@@ -25,9 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
+        <main className="min-h-screen">{children}</main>
         <Footer />
       </body>
     </html>

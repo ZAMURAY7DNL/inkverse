@@ -20,8 +20,8 @@ const TIPO_LABELS: Record<ComicType, { label: string; dir: ReadingDirection; des
   other:    { label: 'Otro',     dir: 'ltr', desc: 'Izq. a Der.' },
 }
 
-const inputClass = "w-full rounded-lg border border-white/10 bg-zinc-900 px-4 py-3 text-sm text-white placeholder-gray-600 focus:border-violet-500/50 focus:outline-none transition-colors"
-const selectClass = "w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2.5 text-sm text-white focus:border-violet-500/50 focus:outline-none transition-colors appearance-none"
+const inputClass = "w-full rounded-lg border border-white/10 bg-zinc-900 px-4 py-3 text-sm text-white placeholder-gray-600 focus:border-ink-500/60 focus:outline-none transition-colors"
+const selectClass = "w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2.5 text-sm text-white focus:border-ink-500/60 focus:outline-none transition-colors appearance-none"
 
 export function NewComicForm({ genres }: NewComicFormProps) {
   const router = useRouter()
@@ -117,9 +117,9 @@ export function NewComicForm({ genres }: NewComicFormProps) {
     <div className="max-w-4xl">
       <div className="mb-8">
         <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
-          <span className={step === 1 ? 'text-violet-400 font-semibold' : ''}>1. Informacion</span>
+          <span className={step === 1 ? 'text-ink-400 font-semibold' : ''}>1. Informacion</span>
           <span>-</span>
-          <span className={step === 2 ? 'text-violet-400 font-semibold' : ''}>2. Generos y detalles</span>
+          <span className={step === 2 ? 'text-ink-400 font-semibold' : ''}>2. Generos y detalles</span>
         </div>
         <h1 className="comic-title text-4xl text-white mb-1">NUEVA OBRA</h1>
         <p className="text-gray-400 text-sm">{step === 1 ? 'Portada, titulo y tipo de obra' : 'Generos, estado y clasificacion'}</p>
@@ -136,7 +136,7 @@ export function NewComicForm({ genres }: NewComicFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">Portada</label>
-              <div {...getRootProps()} className={`relative aspect-[3/4] rounded-xl border-2 border-dashed cursor-pointer transition-all overflow-hidden bg-zinc-900 ${isDragActive ? 'border-violet-500 bg-violet-500/10' : 'border-white/10 hover:border-violet-500/40'}`}>
+              <div {...getRootProps()} className={`relative aspect-[3/4] rounded-xl border-2 border-dashed cursor-pointer transition-all overflow-hidden bg-zinc-900 ${isDragActive ? 'border-ink-500 bg-ink-500/10' : 'border-white/10 hover:border-ink-500/50'}`}>
                 <input {...getInputProps()} />
                 {coverPreview ? (
                   <Image src={coverPreview} alt="Portada" fill className="object-cover" />
@@ -168,7 +168,7 @@ export function NewComicForm({ genres }: NewComicFormProps) {
                   className={inputClass}
                   autoFocus
                 />
-                {slugPreview && <p className="text-xs text-gray-600 mt-1 font-mono">inkverse.app/comic/<span className="text-gray-400">{slugPreview}</span></p>}
+                {slugPreview && <p className="text-xs text-gray-600 mt-1 font-mono">clickcacomics.vercel.app/comic/<span className="text-gray-400">{slugPreview}</span></p>}
               </div>
 
               <div>
@@ -187,7 +187,7 @@ export function NewComicForm({ genres }: NewComicFormProps) {
                 <div className="grid grid-cols-4 gap-1.5">
                   {(Object.keys(TIPO_LABELS) as ComicType[]).map(type => (
                     <button key={type} type="button" onClick={() => setType(type)}
-                      className={`rounded-lg border px-2 py-2.5 text-xs font-medium transition-all ${form.type === type ? 'border-violet-500/60 bg-violet-500/15 text-violet-300' : 'border-white/10 bg-zinc-900 text-gray-500 hover:border-white/20 hover:text-gray-300'}`}>
+                      className={`rounded-lg border px-2 py-2.5 text-xs font-medium transition-all ${form.type === type ? 'border-ink-500/60 bg-ink-500/20 text-ink-300' : 'border-white/10 bg-zinc-900 text-gray-500 hover:border-white/20 hover:text-gray-300'}`}>
                       <div className="font-semibold">{TIPO_LABELS[type].label}</div>
                       <div className="text-gray-600 text-[10px] mt-0.5">{TIPO_LABELS[type].desc}</div>
                     </button>
@@ -197,7 +197,7 @@ export function NewComicForm({ genres }: NewComicFormProps) {
 
               <button type="button"
                 onClick={() => { if (!form.title.trim()) { setError('El titulo es requerido'); return } setError(null); setStep(2) }}
-                className="w-full rounded-lg bg-violet-600 py-3 text-sm font-semibold text-white hover:bg-violet-500 transition-colors">
+                className="w-full rounded-lg bg-ink-500 py-3 text-sm font-semibold text-white hover:bg-ink-400 transition-colors">
                 Continuar
               </button>
             </div>
@@ -218,7 +218,7 @@ export function NewComicForm({ genres }: NewComicFormProps) {
                 <p className="font-semibold text-white truncate">{form.title}</p>
                 <p className="text-xs text-gray-500">{TIPO_LABELS[form.type].label} - {TIPO_LABELS[form.type].desc}</p>
               </div>
-              <button type="button" onClick={() => setStep(1)} className="text-xs text-violet-400 hover:text-violet-300 transition-colors shrink-0">Editar</button>
+              <button type="button" onClick={() => setStep(1)} className="text-xs text-ink-400 hover:text-ink-300 transition-colors shrink-0">Editar</button>
             </div>
 
             <div>
@@ -276,7 +276,7 @@ export function NewComicForm({ genres }: NewComicFormProps) {
                 Atras
               </button>
               <button type="submit" disabled={loading || form.genre_ids.length === 0}
-                className="flex-1 rounded-lg bg-violet-600 py-3 text-sm font-semibold text-white hover:bg-violet-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                className="flex-1 rounded-lg bg-ink-500 py-3 text-sm font-semibold text-white hover:bg-ink-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                 {loading ? (
                   <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />{uploadingCover ? 'Subiendo portada...' : 'Creando obra...'}</>
                 ) : 'Crear Obra'}

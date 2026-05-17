@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bangers&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,15 +8,15 @@
    VARIABLES GLOBALES
    ============================================================ */
 :root {
-  --ink-primary: #7c4dff;
-  --ink-secondary: #6729e8;
-  --manga-accent: #f03e72;
-  --dark-bg: #0d0d14;
-  --dark-surface: #13131f;
-  --dark-card: #1a1a2e;
-  --dark-border: rgba(124, 77, 255, 0.15);
-  --panel-border: 2px solid #000;
-  --panel-shadow: 4px 4px 0px #000;
+  --ink-primary: #e50914;
+  --ink-secondary: #b20710;
+  --manga-accent: #b3b3b3;
+  --dark-bg: #141414;
+  --dark-surface: #181818;
+  --dark-card: #1f1f1f;
+  --dark-border: rgba(255, 255, 255, 0.1);
+  --panel-border: 1px solid rgba(255, 255, 255, 0.08);
+  --panel-shadow: none;
 }
 
 /* ============================================================
@@ -28,8 +28,8 @@ html {
 
 body {
   background-color: var(--dark-bg);
-  color: #e8e8f0;
-  font-family: 'DM Sans', system-ui, sans-serif;
+  color: #e5e5e5;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
@@ -38,7 +38,7 @@ body {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--dark-bg); }
 ::-webkit-scrollbar-thumb { background: var(--ink-primary); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--manga-accent); }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-secondary); }
 
 /* ============================================================
    COMPONENTES ESPECÍFICOS DE CÓMICS
@@ -52,14 +52,15 @@ body {
 
 /* Efecto halftone de fondo */
 .halftone-bg {
-  background-image: radial-gradient(circle, rgba(124, 77, 255, 0.08) 1px, transparent 1px);
-  background-size: 16px 16px;
+  background-image: radial-gradient(circle, rgba(229, 9, 20, 0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
 /* Texto estilo cómic */
 .comic-title {
-  font-family: 'Bebas Neue', Impact, sans-serif;
-  letter-spacing: 0.05em;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  letter-spacing: 0;
+  font-weight: 700;
 }
 
 /* Badge de género */
@@ -86,7 +87,7 @@ body {
 .comic-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(13, 13, 20, 0.95) 0%, transparent 60%);
+  background: linear-gradient(to top, rgba(20, 20, 20, 0.95) 0%, transparent 60%);
   opacity: 0.7;
   transition: opacity 0.2s ease;
 }
@@ -104,7 +105,7 @@ body {
 /* Zona de drop para uploads */
 .dropzone-active {
   border-color: var(--ink-primary) !important;
-  background-color: rgba(124, 77, 255, 0.05) !important;
+  background-color: rgba(229, 9, 20, 0.08) !important;
 }
 
 /* ============================================================
@@ -116,7 +117,7 @@ body {
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #1a1a2e 25%, #232338 50%, #1a1a2e 75%);
+  background: linear-gradient(90deg, #1f1f1f 25%, #2b2b2b 50%, #1f1f1f 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
