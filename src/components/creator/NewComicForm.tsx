@@ -105,10 +105,12 @@ export function NewComicForm({ genres }: NewComicFormProps) {
       }
       router.push(`/creator/comics/${comic.id}`)
       router.refresh()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error inesperado')
-      setLoading(false)
-    }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Error inesperado')
+      } finally {
+        setLoading(false)
+        setUploadingCover(false)
+      }
   }
 
   const slugPreview = form.title ? generateSlug(form.title) : ''
