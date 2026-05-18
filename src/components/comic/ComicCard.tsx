@@ -31,7 +31,7 @@ export function ComicCard({ comic, variant = 'default' }: ComicCardProps) {
     return (
       <Link
         href={`/comic/${comic.slug}`}
-        className="group flex gap-3 rounded-lg border border-white/10 bg-dark-card p-3 transition-colors hover:border-ink-500/30"
+        data-clicka-node className="group flex gap-3 rounded-lg border border-white/10 bg-dark-card p-3 transition-colors hover:border-ink-500/30"
       >
         <div className="relative h-28 w-20 shrink-0 overflow-hidden rounded bg-dark-surface">
           {comic.cover_url ? (
@@ -63,7 +63,7 @@ export function ComicCard({ comic, variant = 'default' }: ComicCardProps) {
   }
 
   return (
-    <Link href={`/comic/${comic.slug}`} className="comic-card group block overflow-hidden rounded-lg">
+    <Link href={`/comic/${comic.slug}`} data-clicka-node className="comic-card group block overflow-hidden rounded-lg">
       <div className="relative aspect-[3/4] bg-dark-card">
         {comic.cover_url ? (
           <Image
