@@ -1,0 +1,315 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+:root {
+  --nf-red: #E50914;
+  --nf-red-dark: #B20710;
+  --nf-dark: #141414;
+  --nf-dark2: #1f1f1f;
+  --nf-dark3: #2a2a2a;
+  --nf-gray: #808080;
+  --nf-light: #e5e5e5;
+  --nf-white: #ffffff;
+  --nf-gold: #F5C518;
+}
+
+.wrap { background: var(--nf-dark); color: var(--nf-light); min-height: 900px; border-radius: var(--border-radius-lg); overflow: hidden; }
+
+/* NAV */
+.nav { background: linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,0,0,0)); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: relative; z-index: 10; }
+.nav-logo { font-size: 22px; font-weight: 500; color: var(--nf-red); letter-spacing: 2px; }
+.nav-links { display: flex; gap: 20px; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--nf-light); text-decoration: none; opacity: 0.85; cursor: pointer; transition: opacity 0.2s; }
+.nav-links a:hover { opacity: 1; }
+.nav-links a.active { color: white; opacity: 1; font-weight: 500; }
+.nav-right { display: flex; gap: 10px; align-items: center; }
+.btn-login { background: transparent; border: 1px solid var(--nf-gray); color: var(--nf-light); padding: 7px 16px; border-radius: 4px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.btn-login:hover { border-color: white; color: white; }
+.btn-signup { background: var(--nf-red); border: none; color: white; padding: 7px 16px; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: 500; transition: background 0.2s; }
+.btn-signup:hover { background: var(--nf-red-dark); }
+.btn-creator-nav { background: transparent; border: 1px solid var(--nf-red); color: var(--nf-red); padding: 7px 14px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.btn-creator-nav:hover { background: var(--nf-red); color: white; }
+
+/* HERO */
+.hero { background: linear-gradient(to right, rgba(0,0,0,0.92) 40%, rgba(0,0,0,0.3)), url('') var(--nf-dark3); padding: 60px 32px 40px; min-height: 320px; display: flex; align-items: center; border-bottom: 1px solid #2a2a2a; position: relative; overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 50%, #3a0a0a 0%, var(--nf-dark) 65%); z-index: 0; }
+.hero-content { position: relative; z-index: 1; max-width: 480px; }
+.hero-badge { background: var(--nf-red); color: white; font-size: 11px; padding: 3px 10px; border-radius: 3px; display: inline-block; margin-bottom: 12px; letter-spacing: 1px; font-weight: 500; }
+.hero-title { font-size: 36px; font-weight: 500; color: white; line-height: 1.2; margin-bottom: 10px; }
+.hero-sub { font-size: 14px; color: var(--nf-gray); margin-bottom: 22px; line-height: 1.6; }
+.hero-actions { display: flex; gap: 10px; align-items: center; }
+.btn-primary { background: var(--nf-red); color: white; border: none; padding: 10px 22px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.btn-primary:hover { background: var(--nf-red-dark); }
+.btn-secondary { background: rgba(255,255,255,0.12); color: white; border: none; padding: 10px 22px; border-radius: 4px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.btn-secondary:hover { background: rgba(255,255,255,0.2); }
+.hero-stats { display: flex; gap: 24px; margin-top: 28px; }
+.hero-stat { text-align: center; }
+.hero-stat-n { font-size: 20px; font-weight: 500; color: var(--nf-red); }
+.hero-stat-l { font-size: 11px; color: var(--nf-gray); margin-top: 2px; }
+
+/* SEARCH BAR */
+.search-bar { padding: 18px 32px; background: var(--nf-dark); border-bottom: 1px solid #2a2a2a; display: flex; gap: 10px; align-items: center; }
+.search-wrap { flex: 1; position: relative; max-width: 520px; }
+.search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--nf-gray); font-size: 16px; }
+.search-input { width: 100%; background: var(--nf-dark3); border: 1px solid #3a3a3a; color: var(--nf-light); padding: 10px 14px 10px 38px; border-radius: 6px; font-size: 14px; outline: none; }
+.search-input::placeholder { color: var(--nf-gray); }
+.search-input:focus { border-color: var(--nf-red); }
+.genre-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { background: var(--nf-dark3); border: 1px solid #3a3a3a; color: var(--nf-gray); padding: 6px 13px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.pill:hover, .pill.active { background: var(--nf-red); border-color: var(--nf-red); color: white; }
+
+/* SECTIONS */
+.section { padding: 28px 32px; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-size: 18px; font-weight: 500; color: white; display: flex; align-items: center; gap: 8px; }
+.section-title i { color: var(--nf-red); font-size: 18px; }
+.see-all { font-size: 12px; color: var(--nf-red); cursor: pointer; text-decoration: none; }
+.see-all:hover { text-decoration: underline; }
+
+/* CARDS */
+.cards-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.comic-card { background: var(--nf-dark3); border-radius: 6px; overflow: hidden; cursor: pointer; transition: transform 0.2s; border: 1px solid #2a2a2a; }
+.comic-card:hover { transform: scale(1.04); border-color: #4a4a4a; }
+.card-thumb { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative; }
+.card-thumb.g1 { background: linear-gradient(135deg, #1a0a2e, #3d1a6e); }
+.card-thumb.g2 { background: linear-gradient(135deg, #0a1a2e, #1a4a7e); }
+.card-thumb.g3 { background: linear-gradient(135deg, #1a2e0a, #3a6e1a); }
+.card-thumb.g4 { background: linear-gradient(135deg, #2e1a0a, #7e4a1a); }
+.card-thumb.g5 { background: linear-gradient(135deg, #2e0a1a, #7e1a4a); }
+.card-thumb.g6 { background: linear-gradient(135deg, #0a2e2e, #1a6e6e); }
+.card-badge { position: absolute; top: 8px; left: 8px; background: var(--nf-red); color: white; font-size: 9px; padding: 2px 7px; border-radius: 3px; font-weight: 500; letter-spacing: 0.5px; }
+.card-badge.new { background: #27ae60; }
+.card-badge.hot { background: #e67e22; }
+.card-rating { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: var(--nf-gold); font-size: 10px; padding: 2px 6px; border-radius: 3px; display: flex; align-items: center; gap: 3px; }
+.card-info { padding: 10px; }
+.card-title { font-size: 12px; font-weight: 500; color: white; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-meta { font-size: 10px; color: var(--nf-gray); display: flex; justify-content: space-between; }
+.card-genre { background: #2a2a2a; color: #aaa; font-size: 9px; padding: 2px 6px; border-radius: 3px; }
+
+/* FEATURED ROW */
+.featured-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.featured-card { border-radius: 8px; overflow: hidden; cursor: pointer; height: 140px; display: flex; align-items: flex-end; padding: 16px; position: relative; transition: transform 0.2s; }
+.featured-card:hover { transform: scale(1.02); }
+.fc1 { background: linear-gradient(135deg, #1a0030, #5a006e); }
+.fc2 { background: linear-gradient(135deg, #001a30, #005a6e); }
+.feat-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); }
+.feat-content { position: relative; z-index: 1; }
+.feat-title { font-size: 16px; font-weight: 500; color: white; margin-bottom: 4px; }
+.feat-desc { font-size: 11px; color: #bbb; }
+
+/* CATEGORIES GRID */
+.cat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.cat-item { background: var(--nf-dark3); border-radius: 8px; padding: 16px 10px; text-align: center; cursor: pointer; border: 1px solid #2a2a2a; transition: all 0.2s; }
+.cat-item:hover { border-color: var(--nf-red); background: #2a1010; }
+.cat-icon { font-size: 22px; margin-bottom: 6px; }
+.cat-name { font-size: 11px; color: var(--nf-gray); font-weight: 500; }
+.cat-count { font-size: 10px; color: #555; margin-top: 2px; }
+
+/* CREATOR BANNER */
+.creator-banner { margin: 16px 32px 28px; background: linear-gradient(to right, #1a0505, #2a0a0a); border: 1px solid #3a1010; border-radius: 10px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; }
+.creator-banner-left { display: flex; align-items: center; gap: 16px; }
+.creator-icon-wrap { width: 52px; height: 52px; background: var(--nf-red); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.creator-icon-wrap i { font-size: 26px; color: white; }
+.creator-banner-text h3 { font-size: 16px; font-weight: 500; color: white; margin-bottom: 4px; }
+.creator-banner-text p { font-size: 12px; color: var(--nf-gray); }
+.btn-creator-main { background: var(--nf-red); color: white; border: none; padding: 11px 24px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.btn-creator-main:hover { background: var(--nf-red-dark); }
+.creator-feats { display: flex; gap: 20px; }
+.creator-feat { text-align: center; }
+.creator-feat i { font-size: 18px; color: var(--nf-red); display: block; margin-bottom: 4px; }
+.creator-feat span { font-size: 10px; color: var(--nf-gray); }
+
+/* TABS */
+.tabs { display: flex; gap: 0; border-bottom: 1px solid #2a2a2a; padding: 0 32px; margin-bottom: 0; }
+.tab { padding: 12px 18px; font-size: 13px; color: var(--nf-gray); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tab:hover { color: white; }
+.tab.active { color: white; border-bottom-color: var(--nf-red); font-weight: 500; }
+</style>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <div style="display:flex;align-items:center;gap:28px">
+      <span class="nav-logo">INKVERSE</span>
+      <div class="nav-links">
+        <a class="active">inicio</a>
+        <a>manga</a>
+        <a>cómics</a>
+        <a>manhwa</a>
+        <a>webtoon</a>
+        <a>novela gráfica</a>
+        <a>mi lista</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="btn-creator-nav" onclick="sendPrompt('Muéstrame el portal para creadores y artistas de InkVerse')"><i class="ti ti-pencil" aria-hidden="true"></i> para creadores</button>
+      <button class="btn-login">iniciar sesión</button>
+      <button class="btn-signup">registrarse</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <span class="hero-badge">★ DESTACADO HOY</span>
+      <h1 class="hero-title">El universo infinito<br>de cómics y manga</h1>
+      <p class="hero-sub">Miles de títulos en manga, cómic occidental, manhwa, manhua y novela gráfica. Lee donde quieras, cuando quieras.</p>
+      <div class="hero-actions">
+        <button class="btn-primary"><i class="ti ti-player-play" aria-hidden="true"></i> leer ahora</button>
+        <button class="btn-secondary"><i class="ti ti-info-circle" aria-hidden="true"></i> más info</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-n">12K+</div><div class="hero-stat-l">títulos</div></div>
+        <div class="hero-stat"><div class="hero-stat-n">3.4M</div><div class="hero-stat-l">lectores</div></div>
+        <div class="hero-stat"><div class="hero-stat-n">8.2K</div><div class="hero-stat-l">creadores</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input class="search-input" type="text" placeholder="Buscar títulos, autores, géneros...">
+    </div>
+    <div class="genre-pills">
+      <span class="pill active">todo</span>
+      <span class="pill">acción</span>
+      <span class="pill">romance</span>
+      <span class="pill">fantasía</span>
+      <span class="pill">terror</span>
+      <span class="pill">shonen</span>
+      <span class="pill">shojo</span>
+      <span class="pill">seinen</span>
+      <span class="pill">isekai</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <span class="tab active">🔥 tendencias</span>
+    <span class="tab">⭐ mejor valorados</span>
+    <span class="tab">🆕 nuevos capítulos</span>
+    <span class="tab">📌 continuar leyendo</span>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title"><i class="ti ti-flame" aria-hidden="true"></i> más vistos esta semana</span>
+      <a class="see-all">ver todos →</a>
+    </div>
+    <div class="cards-row">
+      <div class="comic-card">
+        <div class="card-thumb g1"><span aria-hidden="true">⚔️</span><span class="card-badge hot">hot</span><span class="card-rating"><i class="ti ti-star-filled" style="font-size:9px"></i> 9.2</span></div>
+        <div class="card-info"><div class="card-title">Sombras del Vacío</div><div class="card-meta"><span>cap. 187</span><span class="card-genre">acción</span></div></div>
+      </div>
+      <div class="comic-card">
+        <div class="card-thumb g2"><span aria-hidden="true">🌙</span><span class="card-badge new">nuevo</span><span class="card-rating"><i class="ti ti-star-filled" style="font-size:9px"></i> 8.7</span></div>
+        <div class="card-info"><div class="card-title">Luna de Cristal</div><div class="card-meta"><span>cap. 34</span><span class="card-genre">romance</span></div></div>
+      </div>
+      <div class="comic-card">
+        <div class="card-thumb g3"><span aria-hidden="true">🐉</span><span class="card-badge" style="background:#6a0dad">TOP</span><span class="card-rating"><i class="ti ti-star-filled" style="font-size:9px"></i> 9.5</span></div>
+        <div class="card-info"><div class="card-title">Dragón Eterno</div><div class="card-meta"><span>cap. 412</span><span class="card-genre">fantasía</span></div></div>
+      </div>
+      <div class="comic-card">
+        <div class="card-thumb g4"><span aria-hidden="true">💀</span><span class="card-badge hot">hot</span><span class="card-rating"><i class="ti ti-star-filled" style="font-size:9px"></i> 8.9</span></div>
+        <div class="card-info"><div class="card-title">La Última Sombra</div><div class="card-meta"><span>cap. 92</span><span class="card-genre">terror</span></div></div>
+      </div>
+      <div class="comic-card">
+        <div class="card-thumb g5"><span aria-hidden="true">🌸</span><span class="card-badge new">nuevo</span><span class="card-rating"><i class="ti ti-star-filled" style="font-size:9px"></i> 9.1</span></div>
+        <div class="card-info"><div class="card-title">Pétalos de Acero</div><div class="card-meta"><span>cap. 21</span><span class="card-genre">shojo</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="section-header">
+      <span class="section-title"><i class="ti ti-layout-grid" aria-hidden="true"></i> explorar por categoría</span>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-item"><div class="cat-icon">⚔️</div><div class="cat-name">acción</div><div class="cat-count">2.4K títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">💕</div><div class="cat-name">romance</div><div class="cat-count">1.8K títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">🔮</div><div class="cat-name">fantasía</div><div class="cat-count">2.1K títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">👻</div><div class="cat-name">terror</div><div class="cat-count">980 títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">🌀</div><div class="cat-name">isekai</div><div class="cat-count">1.3K títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">🤣</div><div class="cat-name">comedia</div><div class="cat-count">870 títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">🤖</div><div class="cat-name">sci-fi</div><div class="cat-count">760 títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">🥷</div><div class="cat-name">seinen</div><div class="cat-count">1.1K títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">🌸</div><div class="cat-name">shojo</div><div class="cat-count">940 títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">💥</div><div class="cat-name">shonen</div><div class="cat-count">1.6K títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">🦸</div><div class="cat-name">superhéroes</div><div class="cat-count">620 títulos</div></div>
+      <div class="cat-item"><div class="cat-icon">📖</div><div class="cat-name">novela gráfica</div><div class="cat-count">510 títulos</div></div>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="section-header">
+      <span class="section-title"><i class="ti ti-trending-up" aria-hidden="true"></i> nuevos capítulos</span>
+      <a class="see-all">ver todos →</a>
+    </div>
+    <div class="cards-row">
+      <div class="comic-card">
+        <div class="card-thumb g6"><span aria-hidden="true">🌊</span><span class="card-badge new">nuevo</span></div>
+        <div class="card-info"><div class="card-title">Mareas del Tiempo</div><div class="card-meta"><span>cap. 55</span><span class="card-genre">manhwa</span></div></div>
+      </div>
+      <div class="comic-card">
+        <div class="card-thumb g1"><span aria-hidden="true">🗡️</span><span class="card-badge hot">hot</span></div>
+        <div class="card-info"><div class="card-title">El Último Espadachín</div><div class="card-meta"><span>cap. 203</span><span class="card-genre">acción</span></div></div>
+      </div>
+      <div class="comic-card">
+        <div class="card-thumb g5"><span aria-hidden="true">🎭</span><span class="card-badge new">nuevo</span></div>
+        <div class="card-info"><div class="card-title">Máscaras</div><div class="card-meta"><span>cap. 8</span><span class="card-genre">drama</span></div></div>
+      </div>
+      <div class="comic-card">
+        <div class="card-thumb g2"><span aria-hidden="true">🚀</span><span class="card-badge">SCI-FI</span></div>
+        <div class="card-info"><div class="card-title">Nebulosa Zero</div><div class="card-meta"><span>cap. 47</span><span class="card-genre">sci-fi</span></div></div>
+      </div>
+      <div class="comic-card">
+        <div class="card-thumb g4"><span aria-hidden="true">🔥</span><span class="card-badge hot">hot</span></div>
+        <div class="card-info"><div class="card-title">Ceniza y Gloria</div><div class="card-meta"><span>cap. 128</span><span class="card-genre">seinen</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="creator-banner">
+    <div class="creator-banner-left">
+      <div class="creator-icon-wrap"><i class="ti ti-pencil" aria-hidden="true"></i></div>
+      <div class="creator-banner-text">
+        <h3>¿Eres artista o escritor? Publica tu obra en InkVerse</h3>
+        <p>Llega a millones de lectores · Gana con tu contenido · Herramientas profesionales para creadores</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:28px">
+      <div class="creator-feats">
+        <div class="creator-feat"><i class="ti ti-users" aria-hidden="true"></i><span>comunidad</span></div>
+        <div class="creator-feat"><i class="ti ti-chart-line" aria-hidden="true"></i><span>estadísticas</span></div>
+        <div class="creator-feat"><i class="ti ti-coin" aria-hidden="true"></i><span>monetiza</span></div>
+      </div>
+      <button class="btn-creator-main" onclick="sendPrompt('Muéstrame el portal completo para creadores de InkVerse con todas las herramientas para artistas')"><i class="ti ti-arrow-right" aria-hidden="true"></i> ir al portal creador</button>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="section-header">
+      <span class="section-title"><i class="ti ti-heart" aria-hidden="true"></i> lo más querido por los fans</span>
+      <a class="see-all">ver todos →</a>
+    </div>
+    <div class="featured-row">
+      <div class="featured-card fc1">
+        <div class="feat-overlay"></div>
+        <div class="feat-content">
+          <div class="feat-title">Saga: Reinos de Sombra</div>
+          <div class="feat-desc">Serie completa · 5 arcos · Fantasía épica</div>
+        </div>
+      </div>
+      <div class="featured-card fc2">
+        <div class="feat-overlay"></div>
+        <div class="feat-content">
+          <div class="feat-title">Antología: Amor Digital</div>
+          <div class="feat-desc">12 historias cortas · Romance · Sci-fi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

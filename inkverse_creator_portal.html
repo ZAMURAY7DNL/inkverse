@@ -1,0 +1,465 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nf-red:#E50914;--nf-red-dark:#B20710;--nf-dark:#141414;--nf-dark2:#1c1c1c;
+  --nf-dark3:#242424;--nf-dark4:#2e2e2e;--nf-gray:#888;--nf-light:#e5e5e5;
+  --nf-gold:#F5C518;--nf-green:#27ae60;--nf-blue:#2980b9;--nf-purple:#8e44ad;
+}
+.w{background:var(--nf-dark);color:var(--nf-light);font-family:var(--font-sans);border-radius:12px;overflow:hidden}
+
+/* TOP BAR */
+.topbar{background:#0a0a0a;border-bottom:1px solid #2a2a2a;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:54px}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.logo{font-size:18px;font-weight:500;color:var(--nf-red);letter-spacing:2px}
+.logo-badge{background:#2a0808;color:var(--nf-red);font-size:10px;padding:2px 8px;border-radius:3px;border:1px solid #4a1010;letter-spacing:1px;font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.notif{width:34px;height:34px;background:#2a2a2a;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--nf-red);border-radius:50%;border:1px solid #0a0a0a}
+.avatar{width:34px;height:34px;background:var(--nf-red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:white;cursor:pointer}
+.back-btn{background:transparent;border:1px solid #3a3a3a;color:var(--nf-gray);padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.back-btn:hover{border-color:#888;color:var(--nf-light)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:210px 1fr;min-height:860px}
+
+/* SIDEBAR */
+.sidebar{background:#0f0f0f;border-right:1px solid #222;padding:20px 0}
+.profile-section{padding:0 16px 20px;border-bottom:1px solid #222;margin-bottom:8px}
+.profile-avatar{width:52px;height:52px;background:var(--nf-red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:white;margin-bottom:10px}
+.profile-name{font-size:14px;font-weight:500;color:white;margin-bottom:2px}
+.profile-handle{font-size:11px;color:var(--nf-gray)}
+.profile-tier{display:inline-flex;align-items:center;gap:4px;background:#2a1a0a;color:#e67e22;font-size:10px;padding:3px 8px;border-radius:3px;margin-top:6px;border:1px solid #4a2a10}
+.profile-tier i{font-size:11px}
+.sidebar-nav-label{font-size:10px;color:#555;padding:12px 16px 6px;letter-spacing:1px;font-weight:500}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;color:var(--nf-gray);cursor:pointer;transition:all 0.15s;border-left:2px solid transparent}
+.nav-item:hover{background:#1a1a1a;color:var(--nf-light)}
+.nav-item.active{background:#1a0808;color:white;border-left-color:var(--nf-red)}
+.nav-item i{font-size:16px;width:18px}
+.nav-item .badge{margin-left:auto;background:#2a0808;color:var(--nf-red);font-size:9px;padding:2px 6px;border-radius:10px;min-width:18px;text-align:center}
+
+/* MAIN */
+.main{padding:0;overflow:hidden}
+.main-header{padding:20px 24px 0;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between}
+.page-tabs{display:flex;gap:0}
+.page-tab{padding:12px 18px;font-size:13px;color:var(--nf-gray);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s}
+.page-tab:hover{color:white}
+.page-tab.active{color:white;border-bottom-color:var(--nf-red);font-weight:500}
+.header-actions{display:flex;gap:8px;padding-bottom:12px}
+.btn-pub{background:var(--nf-red);color:white;border:none;padding:8px 18px;border-radius:4px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px}
+.btn-pub:hover{background:var(--nf-red-dark)}
+.btn-draft{background:#2a2a2a;color:var(--nf-light);border:1px solid #3a3a3a;padding:8px 14px;border-radius:4px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.btn-draft:hover{background:#3a3a3a}
+
+/* STATS STRIP */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#222;border-bottom:1px solid #222}
+.stat-block{background:var(--nf-dark2);padding:16px 20px}
+.stat-label{font-size:11px;color:var(--nf-gray);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.stat-label i{font-size:13px}
+.stat-value{font-size:22px;font-weight:500;color:white}
+.stat-delta{font-size:11px;margin-top:3px;display:flex;align-items:center;gap:3px}
+.stat-delta.up{color:var(--nf-green)}
+.stat-delta.down{color:#e74c3c}
+.stat-delta i{font-size:12px}
+
+/* CONTENT AREA */
+.content{padding:20px 24px}
+
+/* WORKS TABLE */
+.works-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-size:15px;font-weight:500;color:white;display:flex;align-items:center;gap:8px}
+.section-title i{color:var(--nf-red);font-size:16px}
+.filter-row{display:flex;gap:6px}
+.filter-btn{background:#2a2a2a;border:1px solid #3a3a3a;color:var(--nf-gray);padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all 0.15s}
+.filter-btn:hover,.filter-btn.active{background:var(--nf-red);border-color:var(--nf-red);color:white}
+.works-table{width:100%;border-collapse:collapse}
+.works-table th{font-size:11px;color:var(--nf-gray);font-weight:500;text-align:left;padding:8px 10px;border-bottom:1px solid #2a2a2a;letter-spacing:0.5px}
+.works-table td{padding:10px 10px;border-bottom:1px solid #1a1a1a;vertical-align:middle}
+.work-thumb{width:40px;height:52px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.wt1{background:#1a0a2e}
+.wt2{background:#0a1a2e}
+.wt3{background:#1a2e0a}
+.wt4{background:#2e1a0a}
+.work-info-cell{display:flex;align-items:center;gap:10px}
+.work-title-txt{font-size:13px;font-weight:500;color:white}
+.work-meta-txt{font-size:11px;color:var(--nf-gray);margin-top:2px}
+.status-pill{font-size:10px;padding:3px 9px;border-radius:3px;font-weight:500}
+.sp-pub{background:#0a2a10;color:#27ae60;border:1px solid #1a4a20}
+.sp-draft{background:#2a2a0a;color:#f39c12;border:1px solid #4a3a10}
+.sp-review{background:#0a1a2a;color:#3498db;border:1px solid #1a2a4a}
+.work-stat{font-size:12px;color:var(--nf-light)}
+.work-stat small{font-size:10px;color:var(--nf-gray);display:block}
+.action-btns{display:flex;gap:6px}
+.act-btn{width:28px;height:28px;border-radius:4px;background:#2a2a2a;border:1px solid #3a3a3a;color:var(--nf-gray);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all 0.15s}
+.act-btn:hover{background:#3a3a3a;color:white}
+.act-btn.red:hover{background:#2a0808;border-color:#4a1010;color:var(--nf-red)}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+
+/* CHART CARD */
+.card{background:var(--nf-dark3);border:1px solid #2a2a2a;border-radius:8px;padding:16px}
+.card-title{font-size:13px;font-weight:500;color:white;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.card-title i{color:var(--nf-red);font-size:15px}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:90px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{background:var(--nf-red);border-radius:2px 2px 0 0;width:100%;opacity:0.85;transition:opacity 0.15s;cursor:pointer}
+.bar:hover{opacity:1}
+.bar.low{background:#3a3a3a}
+.bar-label{font-size:9px;color:var(--nf-gray)}
+
+/* EARNINGS */
+.earn-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1a1a1a;font-size:12px}
+.earn-row:last-child{border-bottom:none}
+.earn-source{display:flex;align-items:center;gap:8px;color:var(--nf-light)}
+.earn-dot{width:8px;height:8px;border-radius:50%}
+.earn-amount{font-weight:500;color:white}
+.earn-pct{font-size:10px;color:var(--nf-gray);margin-top:1px;text-align:right}
+
+/* UPLOAD PANEL */
+.upload-zone{border:1px dashed #3a3a3a;border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all 0.15s;margin-bottom:14px}
+.upload-zone:hover{border-color:var(--nf-red);background:#1a0808}
+.upload-zone i{font-size:28px;color:var(--nf-gray);display:block;margin-bottom:8px}
+.upload-zone:hover i{color:var(--nf-red)}
+.upload-txt{font-size:12px;color:var(--nf-gray)}
+.upload-txt strong{color:var(--nf-light);display:block;margin-bottom:3px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.form-field label{font-size:11px;color:var(--nf-gray);display:block;margin-bottom:5px}
+.form-field input,.form-field select,.form-field textarea{width:100%;background:#1a1a1a;border:1px solid #3a3a3a;color:var(--nf-light);padding:8px 10px;border-radius:4px;font-size:12px;outline:none}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--nf-red)}
+.form-field select option{background:#1a1a1a}
+.form-field textarea{resize:vertical;min-height:60px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a;font-size:12px;color:var(--nf-light)}
+.toggle{width:34px;height:18px;background:#3a3a3a;border-radius:9px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0}
+.toggle.on{background:var(--nf-red)}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;background:white;border-radius:50%;top:2px;left:2px;transition:left 0.2s}
+.toggle.on::after{left:18px}
+
+/* COMMUNITY */
+.comment-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #1a1a1a}
+.c-avatar{width:32px;height:32px;border-radius:50%;background:var(--nf-dark4);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--nf-gray);flex-shrink:0}
+.c-body{}
+.c-name{font-size:12px;font-weight:500;color:white}
+.c-text{font-size:11px;color:var(--nf-gray);margin-top:2px;line-height:1.5}
+.c-meta{font-size:10px;color:#555;margin-top:4px;display:flex;gap:10px}
+.c-meta span{cursor:pointer}
+.c-meta span:hover{color:var(--nf-red)}
+.notif-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #1a1a1a}
+.notif-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ni-red{background:#2a0808}
+.ni-red i{color:var(--nf-red)}
+.ni-gold{background:#2a1a08}
+.ni-gold i{color:var(--nf-gold)}
+.ni-green{background:#0a2a10}
+.ni-green i{color:var(--nf-green)}
+.notif-body{font-size:12px;color:var(--nf-gray);line-height:1.5}
+.notif-body strong{color:white;font-weight:500}
+.notif-time{font-size:10px;color:#555;margin-top:3px}
+
+/* PROGRESS */
+.prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--nf-gray);margin-bottom:5px}
+.prog-bar{height:5px;background:#2a2a2a;border-radius:2px;overflow:hidden;margin-bottom:12px}
+.prog-fill{height:100%;border-radius:2px;background:var(--nf-red)}
+
+/* MONETIZE */
+.mon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.mon-card{background:var(--nf-dark3);border:1px solid #2a2a2a;border-radius:8px;padding:14px;text-align:center}
+.mon-card:hover{border-color:#3a3a3a}
+.mon-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:20px}
+.mi-red{background:#2a0808}
+.mi-red i{color:var(--nf-red)}
+.mi-gold{background:#2a1a08}
+.mi-gold i{color:var(--nf-gold)}
+.mi-blue{background:#0a1a2a}
+.mi-blue i{color:#3498db}
+.mi-green{background:#0a2010}
+.mi-green i{color:var(--nf-green)}
+.mi-purple{background:#1a0a2a}
+.mi-purple i{color:#9b59b6}
+.mi-teal{background:#0a2020}
+.mi-teal i{color:#1abc9c}
+.mon-label{font-size:12px;font-weight:500;color:white;margin-bottom:4px}
+.mon-desc{font-size:10px;color:var(--nf-gray);line-height:1.4}
+.mon-val{font-size:14px;font-weight:500;color:var(--nf-red);margin-top:6px}
+</style>
+
+<div class="w">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">Portal de creadores InkVerse — dashboard del artista</h2>
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="logo">INKVERSE</span>
+      <span class="logo-badge"><i class="ti ti-pencil" aria-hidden="true"></i> STUDIO CREADOR</span>
+      <button class="back-btn" onclick="sendPrompt('Muéstrame la página principal de InkVerse para lectores')"><i class="ti ti-arrow-left" aria-hidden="true"></i> volver al inicio</button>
+    </div>
+    <div class="topbar-right">
+      <div class="notif"><i class="ti ti-bell" style="font-size:16px;color:var(--nf-gray)" aria-hidden="true"></i><span class="notif-dot"></span></div>
+      <div class="avatar">MR</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="profile-section">
+        <div class="profile-avatar">MR</div>
+        <div class="profile-name">Mia Reyes</div>
+        <div class="profile-handle">@miareyes · 24.3K seguidores</div>
+        <div class="profile-tier"><i class="ti ti-star" aria-hidden="true"></i> creador pro</div>
+      </div>
+
+      <div class="sidebar-nav-label">panel</div>
+      <div class="nav-item active"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> resumen</div>
+      <div class="nav-item"><i class="ti ti-book" aria-hidden="true"></i> mis obras <span class="badge">4</span></div>
+      <div class="nav-item"><i class="ti ti-upload" aria-hidden="true"></i> subir capítulo</div>
+      <div class="nav-item"><i class="ti ti-chart-bar" aria-hidden="true"></i> estadísticas</div>
+
+      <div class="sidebar-nav-label">comunidad</div>
+      <div class="nav-item"><i class="ti ti-message" aria-hidden="true"></i> comentarios <span class="badge">12</span></div>
+      <div class="nav-item"><i class="ti ti-bell" aria-hidden="true"></i> notificaciones <span class="badge">5</span></div>
+      <div class="nav-item"><i class="ti ti-users" aria-hidden="true"></i> seguidores</div>
+
+      <div class="sidebar-nav-label">monetización</div>
+      <div class="nav-item"><i class="ti ti-coin" aria-hidden="true"></i> ganancias</div>
+      <div class="nav-item"><i class="ti ti-gift" aria-hidden="true"></i> suscripciones</div>
+      <div class="nav-item"><i class="ti ti-shopping-cart" aria-hidden="true"></i> tienda</div>
+
+      <div class="sidebar-nav-label">configuración</div>
+      <div class="nav-item"><i class="ti ti-user" aria-hidden="true"></i> perfil público</div>
+      <div class="nav-item"><i class="ti ti-settings" aria-hidden="true"></i> ajustes</div>
+    </aside>
+
+    <main class="main">
+      <div class="main-header">
+        <div class="page-tabs">
+          <span class="page-tab active">resumen</span>
+          <span class="page-tab">mis obras</span>
+          <span class="page-tab">subir</span>
+          <span class="page-tab">estadísticas</span>
+          <span class="page-tab">monetización</span>
+          <span class="page-tab">comunidad</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-draft"><i class="ti ti-file" aria-hidden="true"></i> borradores (2)</button>
+          <button class="btn-pub"><i class="ti ti-plus" aria-hidden="true"></i> nueva obra</button>
+        </div>
+      </div>
+
+      <div class="stats-strip">
+        <div class="stat-block">
+          <div class="stat-label"><i class="ti ti-eye" aria-hidden="true"></i> lecturas totales</div>
+          <div class="stat-value">847K</div>
+          <div class="stat-delta up"><i class="ti ti-trending-up" aria-hidden="true"></i> +12.4% esta semana</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-label"><i class="ti ti-heart" aria-hidden="true"></i> favoritos</div>
+          <div class="stat-value">31.2K</div>
+          <div class="stat-delta up"><i class="ti ti-trending-up" aria-hidden="true"></i> +8.7% esta semana</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-label"><i class="ti ti-coin" aria-hidden="true"></i> ganancias (mes)</div>
+          <div class="stat-value">$1,248</div>
+          <div class="stat-delta up"><i class="ti ti-trending-up" aria-hidden="true"></i> +22% vs mes anterior</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-label"><i class="ti ti-users" aria-hidden="true"></i> nuevos seguidores</div>
+          <div class="stat-value">+892</div>
+          <div class="stat-delta down"><i class="ti ti-trending-down" aria-hidden="true"></i> -3.1% esta semana</div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <div class="works-header">
+          <span class="section-title"><i class="ti ti-book" aria-hidden="true"></i> mis obras</span>
+          <div class="filter-row">
+            <span class="filter-btn active">todas</span>
+            <span class="filter-btn">publicadas</span>
+            <span class="filter-btn">borradores</span>
+            <span class="filter-btn">en revisión</span>
+          </div>
+        </div>
+
+        <table class="works-table">
+          <thead>
+            <tr>
+              <th>obra</th><th>estado</th><th>lecturas</th><th>favoritos</th><th>última act.</th><th>acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="work-info-cell"><div class="work-thumb wt1">⚔️</div><div><div class="work-title-txt">Sombras del Vacío</div><div class="work-meta-txt">cap. 24 · acción · manhwa</div></div></div></td>
+              <td><span class="status-pill sp-pub">publicada</span></td>
+              <td><div class="work-stat">412K<small>+2.1K hoy</small></div></td>
+              <td><div class="work-stat">18.4K<small>+124 hoy</small></div></td>
+              <td><div class="work-stat" style="font-size:11px">hace 2 días</div></td>
+              <td><div class="action-btns"><div class="act-btn"><i class="ti ti-edit" aria-hidden="true"></i></div><div class="act-btn"><i class="ti ti-chart-bar" aria-hidden="true"></i></div><div class="act-btn"><i class="ti ti-eye" aria-hidden="true"></i></div><div class="act-btn red"><i class="ti ti-dots" aria-hidden="true"></i></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="work-info-cell"><div class="work-thumb wt2">🌙</div><div><div class="work-title-txt">Luna de Cristal</div><div class="work-meta-txt">cap. 8 · romance · webtoon</div></div></div></td>
+              <td><span class="status-pill sp-pub">publicada</span></td>
+              <td><div class="work-stat">298K<small>+980 hoy</small></div></td>
+              <td><div class="work-stat">10.2K<small>+88 hoy</small></div></td>
+              <td><div class="work-stat" style="font-size:11px">hace 5 días</div></td>
+              <td><div class="action-btns"><div class="act-btn"><i class="ti ti-edit" aria-hidden="true"></i></div><div class="act-btn"><i class="ti ti-chart-bar" aria-hidden="true"></i></div><div class="act-btn"><i class="ti ti-eye" aria-hidden="true"></i></div><div class="act-btn red"><i class="ti ti-dots" aria-hidden="true"></i></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="work-info-cell"><div class="work-thumb wt3">🌿</div><div><div class="work-title-txt">Bosque Eterno</div><div class="work-meta-txt">cap. 3 · fantasía · manga</div></div></div></td>
+              <td><span class="status-pill sp-review">en revisión</span></td>
+              <td><div class="work-stat">24.6K<small>nueva</small></div></td>
+              <td><div class="work-stat">1.1K<small>nueva</small></div></td>
+              <td><div class="work-stat" style="font-size:11px">hace 1 día</div></td>
+              <td><div class="action-btns"><div class="act-btn"><i class="ti ti-edit" aria-hidden="true"></i></div><div class="act-btn"><i class="ti ti-chart-bar" aria-hidden="true"></i></div><div class="act-btn"><i class="ti ti-eye" aria-hidden="true"></i></div><div class="act-btn red"><i class="ti ti-dots" aria-hidden="true"></i></div></div></td>
+            </tr>
+            <tr>
+              <td><div class="work-info-cell"><div class="work-thumb wt4">🔥</div><div><div class="work-title-txt">Proyecto sin título</div><div class="work-meta-txt">cap. 0 · acción · sin género</div></div></div></td>
+              <td><span class="status-pill sp-draft">borrador</span></td>
+              <td><div class="work-stat">—</div></td>
+              <td><div class="work-stat">—</div></td>
+              <td><div class="work-stat" style="font-size:11px">hace 3 horas</div></td>
+              <td><div class="action-btns"><div class="act-btn"><i class="ti ti-edit" aria-hidden="true"></i></div><div class="act-btn"><i class="ti ti-upload" aria-hidden="true"></i></div><div class="act-btn"><i class="ti ti-eye" aria-hidden="true"></i></div><div class="act-btn red"><i class="ti ti-trash" aria-hidden="true"></i></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-title"><span style="display:flex;align-items:center;gap:6px"><i class="ti ti-chart-bar" aria-hidden="true"></i> lecturas — últimos 7 días</span><span style="font-size:11px;color:var(--nf-gray)">total: 14.8K</span></div>
+            <div class="chart-bars">
+              <div class="bar-wrap"><div class="bar" style="height:38%"></div><span class="bar-label">L</span></div>
+              <div class="bar-wrap"><div class="bar" style="height:55%"></div><span class="bar-label">M</span></div>
+              <div class="bar-wrap"><div class="bar" style="height:48%"></div><span class="bar-label">X</span></div>
+              <div class="bar-wrap"><div class="bar" style="height:72%"></div><span class="bar-label">J</span></div>
+              <div class="bar-wrap"><div class="bar" style="height:90%"></div><span class="bar-label">V</span></div>
+              <div class="bar-wrap"><div class="bar" style="height:100%"></div><span class="bar-label">S</span></div>
+              <div class="bar-wrap"><div class="bar" style="height:83%"></div><span class="bar-label">D</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><i class="ti ti-coin" aria-hidden="true"></i> fuentes de ingreso</div>
+            <div class="earn-row"><span class="earn-source"><span class="earn-dot" style="background:var(--nf-red)"></span>suscriptores premium</span><div><div class="earn-amount">$640</div><div class="earn-pct">51% del total</div></div></div>
+            <div class="earn-row"><span class="earn-source"><span class="earn-dot" style="background:var(--nf-gold)"></span>propinas (tips)</span><div><div class="earn-amount">$312</div><div class="earn-pct">25%</div></div></div>
+            <div class="earn-row"><span class="earn-source"><span class="earn-dot" style="background:#3498db"></span>capítulos de pago</span><div><div class="earn-amount">$206</div><div class="earn-pct">16%</div></div></div>
+            <div class="earn-row"><span class="earn-source"><span class="earn-dot" style="background:#27ae60"></span>tienda / merch</span><div><div class="earn-amount">$90</div><div class="earn-pct">7%</div></div></div>
+            <div style="margin-top:12px;padding-top:10px;border-top:1px solid #2a2a2a;display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--nf-gray)">total del mes</span><span style="color:white;font-weight:500">$1,248</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="works-header" style="margin-bottom:10px">
+            <span class="section-title"><i class="ti ti-upload" aria-hidden="true"></i> subir nuevo capítulo</span>
+          </div>
+          <div class="two-col">
+            <div>
+              <div class="upload-zone">
+                <i class="ti ti-photo" aria-hidden="true"></i>
+                <div class="upload-txt"><strong>arrastra tus páginas aquí</strong>JPG, PNG, WEBP · máx. 50 MB por página · hasta 200 páginas</div>
+              </div>
+              <div class="form-row">
+                <div class="form-field"><label>obra</label><select><option>Sombras del Vacío</option><option>Luna de Cristal</option><option>Bosque Eterno</option></select></div>
+                <div class="form-field"><label>número de capítulo</label><input type="text" value="25" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-field"><label>título del capítulo</label><input type="text" placeholder="ej. La traición" /></div>
+                <div class="form-field"><label>fecha de publicación</label><input type="text" value="Ahora mismo" /></div>
+              </div>
+              <div class="form-field" style="margin-bottom:10px"><label>nota del autor (opcional)</label><textarea placeholder="Cuéntale algo a tus lectores sobre este capítulo..."></textarea></div>
+            </div>
+
+            <div>
+              <div class="card" style="margin-bottom:12px">
+                <div class="card-title"><i class="ti ti-settings" aria-hidden="true"></i> opciones de publicación</div>
+                <div class="toggle-row"><span>capítulo gratuito</span><div class="toggle on" id="t1"></div></div>
+                <div class="toggle-row"><span>notificar a seguidores</span><div class="toggle on" id="t2"></div></div>
+                <div class="toggle-row"><span>activar comentarios</span><div class="toggle on" id="t3"></div></div>
+                <div class="toggle-row"><span>publicar en comunidad</span><div class="toggle" id="t4"></div></div>
+                <div class="toggle-row"><span>contenido para adultos (+18)</span><div class="toggle" id="t5"></div></div>
+                <div style="margin-top:12px;display:flex;gap:8px">
+                  <button class="btn-draft" style="flex:1;justify-content:center"><i class="ti ti-file" aria-hidden="true"></i> guardar borrador</button>
+                  <button class="btn-pub" style="flex:1;justify-content:center"><i class="ti ti-send" aria-hidden="true"></i> publicar</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><i class="ti ti-trending-up" aria-hidden="true"></i> progreso del mes</div>
+                <div class="prog-label"><span>capítulos publicados</span><span style="color:white">6 / 8</span></div>
+                <div class="prog-bar"><div class="prog-fill" style="width:75%"></div></div>
+                <div class="prog-label"><span>meta de lecturas</span><span style="color:white">847K / 1M</span></div>
+                <div class="prog-bar"><div class="prog-fill" style="width:85%"></div></div>
+                <div class="prog-label"><span>meta de ganancias</span><span style="color:white">$1,248 / $1,500</span></div>
+                <div class="prog-bar"><div class="prog-fill" style="width:83%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="works-header" style="margin-bottom:10px">
+            <span class="section-title"><i class="ti ti-coin" aria-hidden="true"></i> herramientas de monetización</span>
+          </div>
+          <div class="mon-grid">
+            <div class="mon-card"><div class="mon-icon mi-gold"><i class="ti ti-star" aria-hidden="true"></i></div><div class="mon-label">suscripción premium</div><div class="mon-desc">Lectores pagan mensualmente por acceso anticipado y contenido exclusivo</div><div class="mon-val">$4.99 / mes</div></div>
+            <div class="mon-card"><div class="mon-icon mi-red"><i class="ti ti-lock" aria-hidden="true"></i></div><div class="mon-label">capítulos de pago</div><div class="mon-desc">Cobra por capítulos individuales. Tú defines el precio</div><div class="mon-val">desde $0.50</div></div>
+            <div class="mon-card"><div class="mon-icon mi-blue"><i class="ti ti-heart" aria-hidden="true"></i></div><div class="mon-label">propinas (tips)</div><div class="mon-desc">Los fans pueden enviarte propinas directamente desde el lector</div><div class="mon-val">sin límite</div></div>
+            <div class="mon-card"><div class="mon-icon mi-green"><i class="ti ti-shopping-cart" aria-hidden="true"></i></div><div class="mon-label">tienda de merch</div><div class="mon-desc">Vende prints, pósters y artículos de tus personajes</div><div class="mon-val">comisión 15%</div></div>
+            <div class="mon-card"><div class="mon-icon mi-purple"><i class="ti ti-calendar" aria-hidden="true"></i></div><div class="mon-label">contenido exclusivo</div><div class="mon-desc">Arte conceptual, procesos, bocetos solo para patrocinadores</div><div class="mon-val">tú decides</div></div>
+            <div class="mon-card"><div class="mon-icon mi-teal"><i class="ti ti-brand-patreon" aria-hidden="true"></i></div><div class="mon-label">campañas de apoyo</div><div class="mon-desc">Lanza campañas de financiación para nuevos proyectos o arcos</div><div class="mon-val">meta libre</div></div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="two-col">
+            <div class="card">
+              <div class="card-title"><i class="ti ti-message" aria-hidden="true"></i> comentarios recientes</div>
+              <div class="comment-item">
+                <div class="c-avatar">JL</div>
+                <div class="c-body"><div class="c-name">Jorge L.</div><div class="c-text">¡El cap. 24 estuvo increíble! El giro del final no me lo esperaba para nada</div><div class="c-meta"><span><i class="ti ti-heart" aria-hidden="true"></i> 14</span><span>responder</span><span>anclar</span></div></div>
+              </div>
+              <div class="comment-item">
+                <div class="c-avatar">SM</div>
+                <div class="c-body"><div class="c-name">Sara M.</div><div class="c-text">¿Cuándo sale el próximo capítulo de Luna de Cristal? Llevo días esperando 😭</div><div class="c-meta"><span><i class="ti ti-heart" aria-hidden="true"></i> 8</span><span>responder</span><span>anclar</span></div></div>
+              </div>
+              <div class="comment-item">
+                <div class="c-avatar">AP</div>
+                <div class="c-body"><div class="c-name">Andrés P.</div><div class="c-text">El diseño del nuevo personaje es impresionante. ¿Cuánto tardaste en diseñarlo?</div><div class="c-meta"><span><i class="ti ti-heart" aria-hidden="true"></i> 6</span><span>responder</span><span>anclar</span></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><i class="ti ti-bell" aria-hidden="true"></i> notificaciones</div>
+              <div class="notif-item"><div class="notif-icon ni-gold"><i class="ti ti-star" style="font-size:15px" aria-hidden="true"></i></div><div><div class="notif-body"><strong>+47 nuevos suscriptores premium</strong> esta semana</div><div class="notif-time">hace 2 horas</div></div></div>
+              <div class="notif-item"><div class="notif-icon ni-red"><i class="ti ti-trending-up" style="font-size:15px" aria-hidden="true"></i></div><div><div class="notif-body">Tu obra <strong>Sombras del Vacío</strong> entró en tendencias — posición #3</div><div class="notif-time">hace 5 horas</div></div></div>
+              <div class="notif-item"><div class="notif-icon ni-green"><i class="ti ti-coin" style="font-size:15px" aria-hidden="true"></i></div><div><div class="notif-body">Pago de <strong>$312</strong> procesado y disponible para retirar</div><div class="notif-time">ayer</div></div></div>
+              <div class="notif-item"><div class="notif-icon ni-gold"><i class="ti ti-award" style="font-size:15px" aria-hidden="true"></i></div><div><div class="notif-body">¡Alcanzaste el nivel <strong>Creador Pro</strong>! Nuevas herramientas desbloqueadas</div><div class="notif-time">hace 3 días</div></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.toggle').forEach(t=>{
+  t.addEventListener('click',function(){this.classList.toggle('on')});
+});
+document.querySelectorAll('.filter-btn').forEach(b=>{
+  b.addEventListener('click',function(){
+    this.closest('.filter-row').querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+document.querySelectorAll('.page-tab').forEach(b=>{
+  b.addEventListener('click',function(){
+    this.closest('.page-tabs').querySelectorAll('.page-tab').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+document.querySelectorAll('.nav-item').forEach(b=>{
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
